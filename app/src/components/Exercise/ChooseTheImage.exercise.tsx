@@ -13,6 +13,7 @@ export default function ChooseTheImage({
 }: ChooseTheImageProps) {
   const { styles } = useStyles(stylesheet);
   const [selected, setSelected] = useState<string>("");
+  console.log("🚀 ~ question:", content.question);
 
   const onPressOption = (option: string) => {
     setSelected(option);

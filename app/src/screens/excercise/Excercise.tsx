@@ -1,6 +1,6 @@
 import { useChat } from "react-native-vercel-ai";
 import { useEffect } from "react";
-import { Button, Text, View } from "react-native";
+import { Text, View } from "react-native";
 import {
   createStyleSheet,
   useStyles,
@@ -8,19 +8,22 @@ import {
 } from "react-native-unistyles";
 import ChooseTheImage from "@components/Exercise/ChooseTheImage.exercise";
 import useExerciseInterpreter from "src/hooks/useExerciseInterpreter";
+import ExerciseFooter from "@components/Exercise/Footer";
 
 export default function ExerciseScreen() {
   const { styles } = useStyles(stylesheet);
-  const { messages, handleInputChange, handleSubmit } = useChat({
+  // TODO: move api url and initial input
+  const { messages, handleInputChange, handleSubmit, setMessages } = useChat({
     api: "http://192.168.1.70:4321/api/domagic",
     initialInput: "iniciar leccion con tematica: animales",
   });
-  const { exercise } = useExerciseInterpreter({
+  const { exercise, answerStatus } = useExerciseInterpreter({
     messages,
+    setMessages,
   });
 
   useEffect(() => {
-    // envia automaticamante el primer mensaje seteado en initialInput
+    // starts the chat automatically
     handleSubmit(true);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -39,9 +42,10 @@ export default function ExerciseScreen() {
         {exercise && (
           <ChooseTheImage content={exercise} setValue={onSetValue} />
         )}
-        <View style={{ marginBottom: 20, padding: 12 }}>
-          <Button onPress={handleSubmit} title="comprobar" />
-        </View>
+        <ExerciseFooter
+          answerStatus={answerStatus}
+          submitAnswer={handleSubmit}
+        />
       </View>
     </View>
   );

@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { Message } from "react-native-vercel-ai";
+import { isArray } from "lodash";
+import { fixMessagesHistory } from "src/utils/helpers";
 
 type IAnswerStatus = "correct" | "incorrect" | "none";
 interface IMsg extends Omit<Message, "content"> {
@@ -7,9 +9,10 @@ interface IMsg extends Omit<Message, "content"> {
 }
 interface hookProps {
   messages: IMsg[];
+  setMessages: (e: any) => void;
 }
 
-const useExerciseInterpreter = ({ messages }: hookProps) => {
+const useExerciseInterpreter = ({ messages, setMessages }: hookProps) => {
   const [exercise, setExercise] = useState<any>(null);
   const [answerStatus, setAnswerStatus] = useState<IAnswerStatus>("none");
 
@@ -19,24 +22,30 @@ const useExerciseInterpreter = ({ messages }: hookProps) => {
   };
 
   const parseAnswerResult = (tool: any) => {
-    setAnswerStatus(
-      tool.result.object.isAnswerCorrect ? "correct" : "incorrect",
-    );
+    const isAnswerCorrect = tool.result.object.isAnswerCorrect
+      ? "correct"
+      : "incorrect";
+    setAnswerStatus(isAnswerCorrect);
     return;
   };
 
   useEffect(() => {
     if (messages.length < 1) return;
     const lastMsg = messages[messages.length - 1];
+    // fix history chat
+    if (isArray(lastMsg.content) && !lastMsg.content[0].type) {
+      setMessages(fixMessagesHistory(messages));
+      return;
+    }
     // if last message role is user do nothing
     if (lastMsg.role === "user") return;
-    // if lastMsg.role === "assistant"
+    // if lastMsg role is "assistant"
     // checks if the response of the api is about the quesion
     // or the result of user's answer
-    const tool = lastMsg.content[1].content[0];
+    const tool = lastMsg.content[0];
     if (tool.toolName === "question") parseQuestion(tool);
     if (tool.toolName === "checkAnswer") parseAnswerResult(tool);
-  }, [messages]);
+  }, [messages]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return { exercise, answerStatus };
 };
