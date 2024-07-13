@@ -68,12 +68,15 @@ export const POST: APIRoute = async ({ request }) => {
       }),
       checkAnswer: tool({
         description: "validacion de la respuesta del usuario",
-        parameters: z.object({}),
-        execute: async () => {
+        parameters: z.object({
+          question: z.string().describe("pregunta"),
+          userAnswer: z.string().describe("respuesta del usuario"),
+        }),
+        execute: async ({ userAnswer, question }) => {
           return await generateObject({
             model: openai("gpt-3.5-turbo"),
             schema: checkSchema,
-            prompt: "Resultado sobre si la respuesta del usuario fue correcta",
+            prompt: `es ${userAnswer} la respuesta correcta a ${question}`,
           });
         },
       }),
