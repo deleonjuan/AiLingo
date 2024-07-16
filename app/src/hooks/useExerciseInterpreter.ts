@@ -18,6 +18,7 @@ const useExerciseInterpreter = ({ messages, setMessages }: hookProps) => {
 
   const resetValues = () => {
     setAnswerStatus("none");
+    setExercise(null);
   };
 
   const parseQuestion = (tool: any) => {

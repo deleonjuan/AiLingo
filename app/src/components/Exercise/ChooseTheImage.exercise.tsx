@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Text, Pressable, View } from "react-native";
 import { createStyleSheet, useStyles } from "react-native-unistyles";
 
@@ -14,22 +13,16 @@ export default function ChooseTheImage({
   value,
 }: ChooseTheImageProps) {
   const { styles } = useStyles(stylesheet);
-  const [selected, setSelected] = useState<string>(value);
-
-  const onPressOption = (option: string) => {
-    setSelected(option);
-    setValue(option);
-  };
 
   return (
     <View style={styles.container}>
       {content.possibleAnswers.map((option: any) => (
         <View key={option} style={styles.imageContainer}>
           <Pressable
-            onPress={() => onPressOption(option)}
+            onPress={() => setValue(option)}
             style={[
               styles.imageCardBasic,
-              option === selected ? styles.imageCardSelected : {},
+              option === value ? styles.imageCardSelected : {},
             ]}
             key={option}
           >

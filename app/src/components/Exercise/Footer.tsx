@@ -5,23 +5,31 @@ interface ExerciseFooterProps {
   answerStatus: "correct" | "incorrect" | "none";
   submitAnswer: (e: any) => void;
   onContinue: () => void;
+  isLoading: boolean;
 }
 
 export default function ExerciseFooter({
   answerStatus,
   submitAnswer,
   onContinue,
+  isLoading,
 }: ExerciseFooterProps) {
   const { styles } = useStyles(stylesheet);
 
   return (
     <View style={styles.container}>
-      {answerStatus === "correct" && <Text>Correcto!</Text>}
-      {answerStatus === "incorrect" && <Text>Incorrecto!</Text>}
-      <Button
-        onPress={answerStatus === "correct" ? onContinue : submitAnswer}
-        title={answerStatus === "correct" ? "continuar" : "comprobar"}
-      />
+      {isLoading ? (
+        <Text>loading</Text>
+      ) : (
+        <View>
+          {answerStatus === "correct" && <Text>Correcto!</Text>}
+          {answerStatus === "incorrect" && <Text>Incorrecto!</Text>}
+          <Button
+            onPress={answerStatus === "correct" ? onContinue : submitAnswer}
+            title={answerStatus === "correct" ? "continuar" : "comprobar"}
+          />
+        </View>
+      )}
     </View>
   );
 }

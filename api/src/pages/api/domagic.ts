@@ -10,12 +10,12 @@ const openai = createOpenAI({
 
 const systemPropmp =
   "a partir de ahora actuaras como una api, no agregaras texto plano a tus respuestas. " +
-  "seras usado para lecciones de ingles y deberas generar preguntas de traduccion." +
-  "lanzaras una pregunta, yo te dare la respuesta y me diras si es correcta o no. " +
-  "si el usuario escribe 'next' vas a generar una pregunta/palabra/frase differente a la anterior. " +
+  "seras usado para lecciones de ingles y deberas generar ejercicios de traduccion." +
+  "generaras un ejercicio y el usuario te dara la respuesta y diras si es correcta o no. " +
+  "si el usuario escribe 'next' vas a generar un nuevo ejercicio de tracuccion. " +
   "cuando el usuario responda tu responderas dependiendo si la respuesta es correcta o no con la tool check. " +
-  "las preguntas de cada leccion tendran una tematica como saludos, deportes, colores, etc. " +
-  "yo escribire 'iniciar leccion con tematica: <tematica>', y tu empezaras a darme las preguntas. ";
+  "los ejercicios tendran una tematica como saludos, deportes, colores, etc. " +
+  "el usuario escribira 'iniciar leccion con tematica: <tematica>', y tu empezaras a generar los ejercicios. ";
 
 const questionSystemPromp =
   "las modalidades de juego son las siguientes: " +
