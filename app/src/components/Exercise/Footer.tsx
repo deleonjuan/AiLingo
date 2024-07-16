@@ -4,11 +4,13 @@ import { createStyleSheet, useStyles } from "react-native-unistyles";
 interface ExerciseFooterProps {
   answerStatus: "correct" | "incorrect" | "none";
   submitAnswer: (e: any) => void;
+  onContinue: () => void;
 }
 
 export default function ExerciseFooter({
   answerStatus,
   submitAnswer,
+  onContinue,
 }: ExerciseFooterProps) {
   const { styles } = useStyles(stylesheet);
 
@@ -16,7 +18,10 @@ export default function ExerciseFooter({
     <View style={styles.container}>
       {answerStatus === "correct" && <Text>Correcto!</Text>}
       {answerStatus === "incorrect" && <Text>Incorrecto!</Text>}
-      <Button onPress={submitAnswer} title="comprobar" />
+      <Button
+        onPress={answerStatus === "correct" ? onContinue : submitAnswer}
+        title={answerStatus === "correct" ? "continuar" : "comprobar"}
+      />
     </View>
   );
 }

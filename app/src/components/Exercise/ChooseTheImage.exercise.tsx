@@ -5,15 +5,16 @@ import { createStyleSheet, useStyles } from "react-native-unistyles";
 interface ChooseTheImageProps {
   setValue: (value: string) => void;
   content: any;
+  value: any;
 }
 
 export default function ChooseTheImage({
   setValue,
   content,
+  value,
 }: ChooseTheImageProps) {
   const { styles } = useStyles(stylesheet);
-  const [selected, setSelected] = useState<string>("");
-  console.log("🚀 ~ question:", content.question);
+  const [selected, setSelected] = useState<string>(value);
 
   const onPressOption = (option: string) => {
     setSelected(option);

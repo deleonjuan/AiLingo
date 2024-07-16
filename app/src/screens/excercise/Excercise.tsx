@@ -1,50 +1,64 @@
 import { useChat } from "react-native-vercel-ai";
-import { useEffect } from "react";
-import { Text, View } from "react-native";
-import {
-  createStyleSheet,
-  useStyles,
-  UnistylesRuntime,
-} from "react-native-unistyles";
+import { useEffect, useState } from "react";
+import { View, Text } from "react-native";
+import { createStyleSheet, useStyles } from "react-native-unistyles";
 import ChooseTheImage from "@components/Exercise/ChooseTheImage.exercise";
 import useExerciseInterpreter from "src/hooks/useExerciseInterpreter";
 import ExerciseFooter from "@components/Exercise/Footer";
+import ExcerciseHeaeder from "@components/Exercise/Header";
 
 export default function ExerciseScreen() {
   const { styles } = useStyles(stylesheet);
-  // TODO: move api url and initial input
-  const { messages, handleInputChange, handleSubmit, setMessages } = useChat({
-    api: "http://192.168.1.70:4321/api/domagic",
-    initialInput: "iniciar leccion con tematica: animales",
+  const [questionsLeft, setQuestionsLeft] = useState<number>(3);
+  const { messages, isLoading, input, handleSubmit, setMessages, setInput } = useChat({
+    api: process.env.EXPO_PUBLIC_API_URL + "domagic",
+    initialInput: "iniciar leccion con tematica: colores",
   });
-  const { exercise, answerStatus } = useExerciseInterpreter({
+  const { exercise, answerStatus, resetValues } = useExerciseInterpreter({
     messages,
     setMessages,
   });
 
+  // starts the chat automatically
   useEffect(() => {
-    // starts the chat automatically
-    handleSubmit(true);
+    handleSubmit({});
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const onSetValue = (userAnswer: string) => {
-    handleInputChange(userAnswer as any);
+    setInput(userAnswer);
   };
+
+  const onContinue = async () => {
+    if (questionsLeft === 1) {
+      console.log("FINAL");
+      return;
+    }
+    resetValues();
+    setQuestionsLeft((n) => n - 1);
+    handleSubmit({});
+  };
+
+  useEffect(() => {
+    if (answerStatus === "correct") setInput("next");
+  }, [answerStatus]);
+
+  useEffect(() => {
+    console.log("🚀 ~ ExerciseScreen ~ messages:", messages);
+  }, [messages]);
+
+  if (isLoading) return <Text>loading</Text>;
 
   return (
     <View style={styles.page}>
-      <View style={styles.header}>
-        <Text>Hello from Exercise</Text>
-        <Text>traduce la palabra: </Text>
-        <Text>your answer is</Text>
-      </View>
+      {exercise && <ExcerciseHeaeder exercise={exercise} />}
       <View style={{ flex: 3, display: "flex" }}>
         {exercise && (
-          <ChooseTheImage content={exercise} setValue={onSetValue} />
+          <ChooseTheImage content={exercise} setValue={onSetValue} value={input} />
         )}
         <ExerciseFooter
           answerStatus={answerStatus}
           submitAnswer={handleSubmit}
+          onContinue={onContinue}
         />
       </View>
     </View>
@@ -55,9 +69,5 @@ const stylesheet = createStyleSheet(() => ({
   page: {
     height: "100%",
     display: "flex",
-  },
-  header: {
-    flex: 1,
-    paddingTop: UnistylesRuntime.statusBar.height,
   },
 }));

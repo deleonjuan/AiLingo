@@ -16,6 +16,10 @@ const useExerciseInterpreter = ({ messages, setMessages }: hookProps) => {
   const [exercise, setExercise] = useState<any>(null);
   const [answerStatus, setAnswerStatus] = useState<IAnswerStatus>("none");
 
+  const resetValues = () => {
+    setAnswerStatus("none");
+  };
+
   const parseQuestion = (tool: any) => {
     setExercise(tool.result.object);
     return;
@@ -32,13 +36,13 @@ const useExerciseInterpreter = ({ messages, setMessages }: hookProps) => {
   useEffect(() => {
     if (messages.length < 1) return;
     const lastMsg = messages[messages.length - 1];
+    // if last message role is user do nothing
+    if (lastMsg.role === "user") return;
     // fix history chat
     if (isArray(lastMsg.content) && !lastMsg.content[0].type) {
       setMessages(fixMessagesHistory(messages));
       return;
     }
-    // if last message role is user do nothing
-    if (lastMsg.role === "user") return;
     // if lastMsg role is "assistant"
     // checks if the response of the api is about the quesion
     // or the result of user's answer
@@ -47,7 +51,7 @@ const useExerciseInterpreter = ({ messages, setMessages }: hookProps) => {
     if (tool.toolName === "checkAnswer") parseAnswerResult(tool);
   }, [messages]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  return { exercise, answerStatus };
+  return { exercise, answerStatus, resetValues };
 };
 
 export default useExerciseInterpreter;

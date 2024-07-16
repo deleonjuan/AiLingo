@@ -10,18 +10,20 @@ const openai = createOpenAI({
 
 const systemPropmp =
   "a partir de ahora actuaras como una api, no agregaras texto plano a tus respuestas. " +
-  "seras usado para lecciones de ingles, cada leccion contiene 10 preguntas las cuales tu deberas hacer. " +
+  "seras usado para lecciones de ingles y deberas generar preguntas de traduccion." +
   "lanzaras una pregunta, yo te dare la respuesta y me diras si es correcta o no. " +
-  "si es correcta yo escribire 'next' y tu me daras otra pregunta, asi hasta completar las 10. " +
-  "cuando yo te de la respuesta tu reponderas con dependiendo si mi respuesta es correcta o no con la tool check. " +
+  "si el usuario escribe 'next' vas a generar una pregunta/palabra/frase differente a la anterior. " +
+  "cuando el usuario responda tu responderas dependiendo si la respuesta es correcta o no con la tool check. " +
   "las preguntas de cada leccion tendran una tematica como saludos, deportes, colores, etc. " +
-  "yo escribire 'iniciar leccion con tematica: <tematica>', y tu empezaras a darme las preguntas. " +
+  "yo escribire 'iniciar leccion con tematica: <tematica>', y tu empezaras a darme las preguntas. ";
+
+const questionSystemPromp =
   "las modalidades de juego son las siguientes: " +
-  "1. single word: Genera una pregunta de traducción de una sola palabra del inglés al español. La pregunta debe incluir una palabra en inglés, su traducción correcta al español y de 3 a 8 posibles respuestas, incluyendo la correcta. Asegúrate de que la traducción correcta esté incluida en las posibles respuestas.";
+  "1. 1de4: Genera una sola palabra relacionada a la tematica que el usuario debera traducir y 4 posibles respuestas, incluyendo la correcta. Asegúrate de que la traducción correcta esté incluida en las posibles respuestas.";
 
 const questionSchema = z.object({
   modality: z.string().describe("la modalidad de la pregunta"),
-  question: z.string().describe("palabra_en_ingles"),
+  question: z.string().describe("palabra_a_traducir"),
   answer: z.string().describe("traducción_correcta"),
   possibleAnswers: z
     .string()
@@ -46,23 +48,28 @@ const checkSchema = z.object({
 
 export const POST: APIRoute = async ({ request }) => {
   const { messages } = await request.json();
-  console.log("🚀 ~ constPOST:APIRoute= ~ messages:", messages);
 
   const result = await generateText({
     model: openai("gpt-3.5-turbo"),
     system: systemPropmp,
     tools: {
       question: tool({
-        description: "Genera la pregunta que se le dara al usuario",
+        description:
+          "Genera una pregunta/palabra/frase que el usuario debera traducir respetando la tematica y la modalidad.",
         parameters: z.object({
-          modality: z.string().describe("la modalidad de la pregunta"),
           tematica: z.string().describe("la tematica de la pregunta"),
+          lastQuestion: z
+            .string()
+            .describe("la palabra/frase/pregunta que hiciste antes"),
         }),
-        execute: async ({ modality, tematica }) => {
+        execute: async ({ tematica, lastQuestion }) => {
           return await generateObject({
             model: openai("gpt-3.5-turbo"),
+            system: questionSystemPromp,
             schema: questionSchema,
-            prompt: `Genera una pregunta usando la modalidad ${modality} y la tematica ${tematica}`,
+            prompt:
+              `Usa una modalidad para generar un ejercicio de traduccion con la tematica ${tematica} ` +
+              `y que sea diferente al ejercicio de traduccion anterior que fue traducir o responder: ${lastQuestion}`,
           });
         },
       }),
@@ -76,7 +83,7 @@ export const POST: APIRoute = async ({ request }) => {
           return await generateObject({
             model: openai("gpt-3.5-turbo"),
             schema: checkSchema,
-            prompt: `es ${userAnswer} la respuesta correcta a ${question}`,
+            prompt: `es ${userAnswer} la respuesta o traduccion correcta a la palabra/pregunta/frase ${question}`,
           });
         },
       }),
