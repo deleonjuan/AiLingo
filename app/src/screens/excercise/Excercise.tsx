@@ -4,9 +4,11 @@ import { useChat } from "react-native-vercel-ai";
 import { createStyleSheet, useStyles } from "react-native-unistyles";
 import useExerciseInterpreter from "src/hooks/useExerciseInterpreter";
 import useChatLog from "src/hooks/useChatLog";
-import ChooseTheImage from "@components/Exercise/ChooseTheImage.exercise";
 import ExerciseFooter from "@components/Exercise/Footer";
 import ExcerciseHeaeder from "@components/Exercise/Header";
+
+import OneOfFour from "@components/Exercise/OneOfFour.exercise";
+import OneOfThree from "@components/Exercise/OneOfThree.exercise";
 
 export default function ExerciseScreen() {
   const { styles } = useStyles(stylesheet);
@@ -47,12 +49,21 @@ export default function ExerciseScreen() {
     if (answerStatus === "correct") setInput("next");
   }, [answerStatus, setInput]);
 
+  const ExerciseSelector = (props: any) => {
+    const options = {
+      "1OF4": () => <OneOfFour {...props} />,
+      "1OF3": () => <OneOfThree {...props} />,
+    } as any;
+
+    return options[exercise.modality]();
+  };
+
   return (
     <View style={styles.page}>
       {exercise && <ExcerciseHeaeder exercise={exercise} />}
       <View style={{ flex: 3, display: "flex" }}>
         {exercise && (
-          <ChooseTheImage
+          <ExerciseSelector
             content={exercise}
             setValue={onSetValue}
             value={userAnswer}

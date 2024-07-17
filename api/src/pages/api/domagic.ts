@@ -9,7 +9,7 @@ const openai = createOpenAI({
 });
 
 const systemPropmp =
-  "a partir de ahora actuaras como una api, no agregaras texto plano a tus respuestas. " +
+  "A partir de ahora actuaras como una api, no agregaras texto plano a tus respuestas. " +
   "seras usado para lecciones de ingles y deberas generar ejercicios de traduccion." +
   "generaras un ejercicio y el usuario te dara la respuesta y diras si es correcta o no. " +
   "si el usuario escribe 'next' vas a generar un nuevo ejercicio de tracuccion. " +
@@ -18,8 +18,10 @@ const systemPropmp =
   "el usuario escribira 'iniciar leccion con tematica: <tematica>', y tu empezaras a generar los ejercicios. ";
 
 const questionSystemPromp =
-  "las modalidades de juego son las siguientes: " +
-  "1. 1de4: Genera una sola palabra relacionada a la tematica que el usuario debera traducir y 4 posibles respuestas, incluyendo la correcta. Asegúrate de que la traducción correcta esté incluida en las posibles respuestas.";
+  "Las modalidades de juego que puedes elegir son las siguientes: " +
+  "1. 1OF4: Genera una sola palabra relacionada a la tematica que el usuario debera traducir y 4 posibles respuestas, incluyendo la correcta. Asegúrate de que la traducción correcta esté incluida en las posibles respuestas." +
+  "2. 1OF3: Genera una sola palabra relacionada a la tematica que el usuario debera traducir y 3 posibles respuestas, incluyendo la correcta. Asegúrate de que la traducción correcta esté incluida en las posibles respuestas." +
+  "";
 
 const questionSchema = z.object({
   modality: z.string().describe("la modalidad de la pregunta"),
@@ -55,20 +57,22 @@ export const POST: APIRoute = async ({ request }) => {
     tools: {
       question: tool({
         description:
-          "Genera una pregunta/palabra/frase que el usuario debera traducir respetando la tematica y la modalidad.",
+          "Genera un ejercicio de traduccion respetando la tematica.",
         parameters: z.object({
           tematica: z.string().describe("la tematica de la pregunta"),
+          lastModality: z.string().describe("la modalidad usada anteriormente"),
           lastQuestion: z
             .string()
             .describe("la palabra/frase/pregunta que hiciste antes"),
         }),
-        execute: async ({ tematica, lastQuestion }) => {
+        execute: async ({ tematica, lastQuestion, lastModality }) => {
           return await generateObject({
             model: openai("gpt-3.5-turbo"),
             system: questionSystemPromp,
             schema: questionSchema,
             prompt:
-              `Usa una modalidad para generar un ejercicio de traduccion con la tematica ${tematica} ` +
+              `Elige una modalidad de la lista para generar un ejercicio de traduccion con la tematica ${tematica} ` +
+              `la modalidad debe ser diferente a ${lastModality}. ` +
               `y que sea diferente al ejercicio de traduccion anterior que fue traducir o responder: ${lastQuestion}`,
           });
         },
