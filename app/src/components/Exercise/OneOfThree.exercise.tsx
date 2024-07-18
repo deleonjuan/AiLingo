@@ -1,5 +1,6 @@
-import { Text, Pressable, View } from "react-native";
+import { Pressable, View } from "react-native";
 import { createStyleSheet, useStyles } from "react-native-unistyles";
+import Text from "@components/common/Text";
 
 interface OneOfThreeProps {
   setValue: (value: string) => void;
@@ -34,7 +35,7 @@ export default function OneOfThree({
   );
 }
 
-const stylesheet = createStyleSheet(() => ({
+const stylesheet = createStyleSheet((theme) => ({
   container: {
     marginHorizontal: 8,
     flex: 1,
@@ -43,14 +44,17 @@ const stylesheet = createStyleSheet(() => ({
   },
   imageCardBasic: {
     margin: 8,
-    backgroundColor: "white",
+    backgroundColor: theme.colors.bgGray,
     borderRadius: 20,
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    paddingVertical: 20,
+    paddingVertical: 16,
+    borderWidth: 4,
   },
   imageCardSelected: {
-    backgroundColor: "red",
+    backgroundColor: theme.colors.duoBlue,
+    borderWidth: 4,
+    borderColor: theme.colors.duoGreen,
   },
 }));

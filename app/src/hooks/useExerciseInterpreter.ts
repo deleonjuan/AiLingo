@@ -8,7 +8,7 @@ interface IMsg extends Omit<Message, "content"> {
   content: string | any[];
 }
 interface hookProps {
-  messages: IMsg[];
+  messages: IMsg[] | any[];
   setMessages: (e: any) => void;
 }
 

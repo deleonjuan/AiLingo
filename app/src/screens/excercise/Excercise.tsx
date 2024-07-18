@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
 import { View } from "react-native";
 import { useChat } from "react-native-vercel-ai";
-import { createStyleSheet, useStyles } from "react-native-unistyles";
+import {
+  createStyleSheet,
+  UnistylesRuntime,
+  useStyles,
+} from "react-native-unistyles";
 import useExerciseInterpreter from "src/hooks/useExerciseInterpreter";
 import useChatLog from "src/hooks/useChatLog";
 import ExerciseFooter from "@components/Exercise/Footer";
@@ -9,6 +13,7 @@ import ExcerciseHeaeder from "@components/Exercise/Header";
 
 import OneOfFour from "@components/Exercise/OneOfFour.exercise";
 import OneOfThree from "@components/Exercise/OneOfThree.exercise";
+import { StatusBar } from "expo-status-bar";
 
 interface ExerciseScreenProps {
   route: any;
@@ -66,6 +71,7 @@ export default function ExerciseScreen({ route }: ExerciseScreenProps) {
 
   return (
     <View style={styles.page}>
+      <StatusBar style="light" translucent={true} />
       {exercise && <ExcerciseHeaeder exercise={exercise} />}
       <View style={{ flex: 3, display: "flex" }}>
         {exercise && (
@@ -86,9 +92,10 @@ export default function ExerciseScreen({ route }: ExerciseScreenProps) {
   );
 }
 
-const stylesheet = createStyleSheet(() => ({
+const stylesheet = createStyleSheet((theme) => ({
   page: {
-    height: "100%",
-    display: "flex",
+    height: UnistylesRuntime.screen.height + UnistylesRuntime.statusBar.height,
+    // display: "flex",
+    backgroundColor: theme.colors.bgBlack,
   },
 }));

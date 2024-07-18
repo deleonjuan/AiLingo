@@ -1,9 +1,12 @@
 export const gemini = {
   colors: {
     bgBlack: "#000",
-    bgGray: "#2e2e30",
+    bgGray: "#222327",
     bgLightGray: "#4A4949",
     text: "#fff",
+    duoBlue: "#131f24",
+    duoGreen: "#58a700",
+    danger: "red",
   },
 };
 

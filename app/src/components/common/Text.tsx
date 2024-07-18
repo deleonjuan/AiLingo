@@ -10,5 +10,6 @@ export default function Text(props: TextProps) {
 const stylesheet = createStyleSheet((theme) => ({
   colorText: {
     color: theme.colors.text,
+    fontFamily: "poppins",
   },
 }));
