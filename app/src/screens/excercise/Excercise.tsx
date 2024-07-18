@@ -10,13 +10,19 @@ import ExcerciseHeaeder from "@components/Exercise/Header";
 import OneOfFour from "@components/Exercise/OneOfFour.exercise";
 import OneOfThree from "@components/Exercise/OneOfThree.exercise";
 
-export default function ExerciseScreen() {
+interface ExerciseScreenProps {
+  route: any;
+}
+
+export default function ExerciseScreen({ route }: ExerciseScreenProps) {
   const { styles } = useStyles(stylesheet);
   const [questionsLeft, setQuestionsLeft] = useState<number>(3);
   const [userAnswer, setUseAnswer] = useState<any>("");
+
+  const { topic } = route.params;
   const { messages, isLoading, handleSubmit, setMessages, setInput } = useChat({
     api: process.env.EXPO_PUBLIC_API_URL + "domagic",
-    initialInput: "iniciar leccion con tematica: colores",
+    initialInput: `iniciar leccion con tematica: ${topic}`,
   });
   useChatLog(messages);
   const { exercise, answerStatus, resetValues } = useExerciseInterpreter({

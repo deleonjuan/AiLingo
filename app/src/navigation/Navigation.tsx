@@ -6,7 +6,7 @@ import HomeScreen from "@screens/home";
 import ExerciseScreen from "@screens/excercise";
 
 const RootStack = createNativeStackNavigator({
-  initialRouteName: SCREENS.EXCERCISE,
+  initialRouteName: SCREENS.HOME,
   screenOptions: {
     headerShown: false,
   },
