@@ -8,12 +8,13 @@ import {
 } from "react-native-unistyles";
 import useExerciseInterpreter from "src/hooks/useExerciseInterpreter";
 import useChatLog from "src/hooks/useChatLog";
-import ExerciseFooter from "@components/Exercise/Footer";
-import ExcerciseHeaeder from "@components/Exercise/Header";
+import ExerciseFooter from "@screens/excercise/components/Footer";
+import ExcerciseHeaeder from "@screens/excercise/components/Header";
 
-import OneOfFour from "@components/Exercise/OneOfFour.exercise";
-import OneOfThree from "@components/Exercise/OneOfThree.exercise";
+import OneOfFour from "@screens/excercise/components/OneOfFour.exercise";
+import OneOfThree from "@screens/excercise/components/OneOfThree.exercise";
 import { StatusBar } from "expo-status-bar";
+import Loading from "@components/common/Loading";
 
 interface ExerciseScreenProps {
   route: any;
@@ -72,22 +73,28 @@ export default function ExerciseScreen({ route }: ExerciseScreenProps) {
   return (
     <View style={styles.page}>
       <StatusBar style="light" translucent={true} />
-      {exercise && <ExcerciseHeaeder exercise={exercise} />}
-      <View style={{ flex: 3, display: "flex" }}>
-        {exercise && (
-          <ExerciseSelector
-            content={exercise}
-            setValue={onSetValue}
-            value={userAnswer}
-          />
-        )}
-        <ExerciseFooter
-          answerStatus={answerStatus}
-          submitAnswer={handleSubmit}
-          onContinue={onContinue}
-          isLoading={isLoading}
-        />
-      </View>
+
+      {isLoading && !exercise && answerStatus === "none" && <Loading />}
+
+      {exercise && (
+        <>
+          <ExcerciseHeaeder exercise={exercise} />
+          <View style={{ flex: 3, display: "flex" }}>
+            <ExerciseSelector
+              content={exercise}
+              setValue={onSetValue}
+              value={userAnswer}
+            />
+
+            <ExerciseFooter
+              answerStatus={answerStatus}
+              submitAnswer={handleSubmit}
+              onContinue={onContinue}
+              isLoading={isLoading}
+            />
+          </View>
+        </>
+      )}
     </View>
   );
 }

@@ -9,12 +9,13 @@ import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
 import { useChat } from "react-native-vercel-ai";
 import TopicsList from "./components/TopicsList";
+import Loading from "@components/common/Loading";
 
 export default function HomeScreen() {
   const { styles } = useStyles(stylesheet);
   const [headerH, setHeaderH] = useState<number>(0);
   const [topics, setTopics] = useState<any[]>([]);
-  const { messages, handleSubmit } = useChat({
+  const { messages, isLoading, handleSubmit } = useChat({
     api: process.env.EXPO_PUBLIC_API_URL + "getTopics",
     initialInput: "start",
   });
@@ -53,13 +54,17 @@ export default function HomeScreen() {
           <Text style={styles.headerTitle}>Listo para aprender?</Text>
         </View>
       </View>
-      <ScrollView
-        style={{ height: "100%" }}
-        showsVerticalScrollIndicator={false}
-      >
-        <View style={{ height: headerH + 50 }} />
-        {topics.length > 0 && <TopicsList topicList={topics} />}
-      </ScrollView>
+      {!isLoading && topics.length > 0 ? (
+        <ScrollView
+          style={{ height: "100%" }}
+          showsVerticalScrollIndicator={false}
+        >
+          <View style={{ height: headerH + 50 }} />
+          <TopicsList topicList={topics} />
+        </ScrollView>
+      ) : (
+        <Loading />
+      )}
     </View>
   );
 }
