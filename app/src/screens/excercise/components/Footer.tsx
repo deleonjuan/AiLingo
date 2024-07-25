@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { View, LayoutChangeEvent, Pressable } from "react-native";
+import { View, LayoutChangeEvent } from "react-native";
 import { createStyleSheet, useStyles } from "react-native-unistyles";
 import Text from "@components/common/Text";
+import Button from "@components/common/Button";
 
 interface ExerciseFooterProps {
   answerStatus: "correct" | "incorrect" | "none";
@@ -39,14 +40,10 @@ export default function ExerciseFooter({
             <Text style={{ fontSize: 16 }}>Loading...</Text>
           </View>
         ) : (
-          <Pressable
+          <Button
             onPress={answerStatus === "correct" ? onContinue : submitAnswer}
-            style={styles.button}
-          >
-            <Text style={{ fontSize: 16 }}>
-              {answerStatus === "correct" ? "continuar" : "comprobar"}
-            </Text>
-          </Pressable>
+            label={answerStatus === "correct" ? "continuar" : "comprobar"}
+          />
         )}
       </View>
     </View>

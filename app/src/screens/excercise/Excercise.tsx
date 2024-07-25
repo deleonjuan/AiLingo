@@ -15,6 +15,9 @@ import OneOfFour from "@screens/excercise/components/OneOfFour.exercise";
 import OneOfThree from "@screens/excercise/components/OneOfThree.exercise";
 import { StatusBar } from "expo-status-bar";
 import Loading from "@components/common/Loading";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { SCREENS } from "src/constants/screens.names";
 
 interface ExerciseScreenProps {
   route: any;
@@ -24,6 +27,7 @@ export default function ExerciseScreen({ route }: ExerciseScreenProps) {
   const { styles } = useStyles(stylesheet);
   const [questionsLeft, setQuestionsLeft] = useState<number>(3);
   const [userAnswer, setUseAnswer] = useState<any>("");
+  const { navigate } = useNavigation<NativeStackNavigationProp<any>>();
 
   const { topic } = route.params;
   const { messages, isLoading, handleSubmit, setMessages, setInput } = useChat({
@@ -48,7 +52,7 @@ export default function ExerciseScreen({ route }: ExerciseScreenProps) {
 
   const onContinue = async () => {
     if (questionsLeft === 1) {
-      console.log("FINAL");
+      navigate(SCREENS.LESSON_FINISHED);
       return;
     }
     setUseAnswer("");
@@ -102,7 +106,6 @@ export default function ExerciseScreen({ route }: ExerciseScreenProps) {
 const stylesheet = createStyleSheet((theme) => ({
   page: {
     height: UnistylesRuntime.screen.height + UnistylesRuntime.statusBar.height,
-    // display: "flex",
     backgroundColor: theme.colors.bgBlack,
   },
 }));

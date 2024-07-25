@@ -4,9 +4,10 @@ import { SCREENS } from "../constants/screens.names";
 
 import HomeScreen from "@screens/home";
 import ExerciseScreen from "@screens/excercise";
+import LessonFinishedScreen from "@screens/LessonFinished";
 
 const RootStack = createNativeStackNavigator({
-  initialRouteName: SCREENS.HOME,
+  initialRouteName: SCREENS.LESSON_FINISHED,
   screenOptions: {
     headerShown: false,
   },
@@ -16,6 +17,9 @@ const RootStack = createNativeStackNavigator({
     },
     [SCREENS.EXCERCISE]: {
       screen: ExerciseScreen,
+    },
+    [SCREENS.LESSON_FINISHED]: {
+      screen: LessonFinishedScreen,
     },
   },
 });
