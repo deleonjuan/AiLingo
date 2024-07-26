@@ -12,26 +12,26 @@ interface hookProps {
   setMessages: (e: any) => void;
 }
 
-const useExerciseInterpreter = ({ messages, setMessages }: hookProps) => {
-  const [exercise, setExercise] = useState<any>(null);
+const useExerciseHandler = ({ messages, setMessages }: hookProps) => {
+  const [exerciseList, setExercises] = useState<any>([]);
+  const [exercise, setExercise] = useState<any>(undefined);
+  const [excerciseNum, setExercisesNum] = useState<number>(0);
   const [answerStatus, setAnswerStatus] = useState<IAnswerStatus>("none");
 
-  const resetValues = () => {
-    setAnswerStatus("none");
-    setExercise(null);
-  };
-
-  const parseQuestion = (tool: any) => {
-    setExercise(tool.result.object);
-    return;
-  };
-
-  const parseAnswerResult = (tool: any) => {
-    const isAnswerCorrect = tool.result.object.isAnswerCorrect
+  const onCheckAnswer = (userAnswer: string) => {
+    const isAnswerCorrect = exercise.answer.includes(userAnswer)
       ? "correct"
       : "incorrect";
     setAnswerStatus(isAnswerCorrect);
     return;
+  };
+
+  const getNextExcercise = () => {
+    setAnswerStatus("none");
+    setExercisesNum((e) => {
+      setExercise(exerciseList[e + 1]);
+      return e + 1;
+    });
   };
 
   useEffect(() => {
@@ -46,13 +46,18 @@ const useExerciseInterpreter = ({ messages, setMessages }: hookProps) => {
     }
     // if lastMsg role is "assistant"
     // checks if the response of the api is about the quesion
-    // or the result of user's answer
     const tool = lastMsg.content[0];
-    if (tool.toolName === "question") parseQuestion(tool);
-    if (tool.toolName === "checkAnswer") parseAnswerResult(tool);
+    setExercises(tool.result.object);
+    setExercise(tool.result.object[excerciseNum]);
   }, [messages]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  return { exercise, answerStatus, resetValues };
+  return {
+    exercise,
+    answerStatus,
+    onCheckAnswer,
+    getNextExcercise,
+    isLast: exerciseList.length === excerciseNum + 1,
+  };
 };
 
-export default useExerciseInterpreter;
+export default useExerciseHandler;

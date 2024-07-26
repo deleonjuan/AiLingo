@@ -6,7 +6,7 @@ import {
   UnistylesRuntime,
   useStyles,
 } from "react-native-unistyles";
-import useExerciseInterpreter from "src/hooks/useExerciseInterpreter";
+import useExerciseHandler from "src/hooks/useExerciseHandler";
 import useChatLog from "src/hooks/useChatLog";
 import ExerciseFooter from "@screens/excercise/components/Footer";
 import ExcerciseHeaeder from "@screens/excercise/components/Header";
@@ -24,46 +24,34 @@ interface ExerciseScreenProps {
 }
 
 export default function ExerciseScreen({ route }: ExerciseScreenProps) {
-  const { styles } = useStyles(stylesheet);
-  const [questionsLeft, setQuestionsLeft] = useState<number>(3);
-  const [userAnswer, setUseAnswer] = useState<any>("");
   const { navigate } = useNavigation<NativeStackNavigationProp<any>>();
-
+  const { styles } = useStyles(stylesheet);
   const { topic } = route.params;
-  const { messages, isLoading, handleSubmit, setMessages, setInput } = useChat({
-    api: process.env.EXPO_PUBLIC_API_URL + "domagic",
+  const [userAnswer, setUseAnswer] = useState<any>("");
+  const { messages, isLoading, handleSubmit, setMessages } = useChat({
+    api: process.env.EXPO_PUBLIC_API_URL + "getLesson",
     initialInput: `iniciar leccion con tematica: ${topic}`,
   });
+  const { exercise, answerStatus, isLast, getNextExcercise, onCheckAnswer } =
+    useExerciseHandler({
+      messages,
+      setMessages,
+    });
   useChatLog(messages);
-  const { exercise, answerStatus, resetValues } = useExerciseInterpreter({
-    messages,
-    setMessages,
-  });
 
   // starts the chat automatically
   useEffect(() => {
     handleSubmit({});
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const onSetValue = (userAnswer: string) => {
-    setInput(userAnswer);
-    setUseAnswer(userAnswer);
-  };
-
-  const onContinue = async () => {
-    if (questionsLeft === 1) {
+  const onContinue = () => {
+    if (isLast) {
       navigate(SCREENS.LESSON_FINISHED);
       return;
     }
     setUseAnswer("");
-    resetValues();
-    setQuestionsLeft((n) => n - 1);
-    handleSubmit({});
+    getNextExcercise();
   };
-
-  useEffect(() => {
-    if (answerStatus === "correct") setInput("next");
-  }, [answerStatus, setInput]);
 
   const ExerciseSelector = (props: any) => {
     const options = {
@@ -86,13 +74,13 @@ export default function ExerciseScreen({ route }: ExerciseScreenProps) {
           <View style={{ flex: 3, display: "flex" }}>
             <ExerciseSelector
               content={exercise}
-              setValue={onSetValue}
+              setValue={setUseAnswer}
               value={userAnswer}
             />
 
             <ExerciseFooter
               answerStatus={answerStatus}
-              submitAnswer={handleSubmit}
+              submitAnswer={() => onCheckAnswer(userAnswer)}
               onContinue={onContinue}
               isLoading={isLoading}
             />
