@@ -10,8 +10,13 @@ import { useEffect, useState } from "react";
 import { useChat } from "react-native-vercel-ai";
 import TopicsList from "./components/TopicsList";
 import Loading from "@components/common/Loading";
+import { useAppDispatch, useAppSelector } from "src/hooks/hooks";
+import { isEmpty } from "lodash";
+import { learningActions } from "src/store/slices/learning";
 
 export default function HomeScreen() {
+  const dispatch = useAppDispatch();
+  const { initialTopics } = useAppSelector((state) => state.learningReducer);
   const { styles } = useStyles(stylesheet);
   const [headerH, setHeaderH] = useState<number>(0);
   const [topics, setTopics] = useState<any[]>([]);
@@ -24,9 +29,11 @@ export default function HomeScreen() {
     setHeaderH(e.nativeEvent.layout.height);
   };
 
-  // starts the chat automatically
+  // uses topics stored in redux
+  // if no topics call the api
   useEffect(() => {
-    handleSubmit({});
+    if (!isEmpty(initialTopics)) setTopics(initialTopics);
+    else handleSubmit({});
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
@@ -35,6 +42,7 @@ export default function HomeScreen() {
     const lastMsg = messages[messages.length - 1] as any;
     if (lastMsg?.content?.topics) {
       setTopics(lastMsg.content.topics);
+      dispatch(learningActions.setInitialTopics(lastMsg.content.topics));
     }
   }, [messages]);
 

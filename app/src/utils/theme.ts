@@ -6,6 +6,7 @@ export const gemini = {
     text: "#fff",
     duoBlue: "#131f24",
     duoGreen: "#58a700",
+    duoYellow: "#ffd900",
     danger: "red",
   },
 };

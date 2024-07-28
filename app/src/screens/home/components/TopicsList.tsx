@@ -7,20 +7,22 @@ import Star from "@assets/star.svg";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { SCREENS } from "src/constants/screens.names";
+import { useAppSelector } from "src/hooks/hooks";
 
 interface StepProps {
   topic: string;
   onPress: (topic: string) => void;
+  isDone: boolean
 }
 
-const Step = ({ topic, onPress }: StepProps) => {
+const Step = ({ topic, onPress, isDone }: StepProps) => {
   const { styles, theme } = useStyles(stylesheet);
   return (
     <Pressable onPress={() => onPress(topic)} style={styles.StepContainer}>
       <View style={styles.StepIconContainer}>
-        <Hexagon color={theme.colors.bgGray} width={120} height={120} />
+        <Hexagon color={theme.colors.duoGreen} width={120} height={120} />
         <View style={styles.StepInsideIcon}>
-          <Star width={50} height={50} color={theme.colors.bgLightGray} />
+          <Star width={50} height={50} color={ isDone ? theme.colors.text : theme.colors.duoBlue} />
         </View>
       </View>
       <Text style={{ fontSize: 18 }} key={topic}>
@@ -35,6 +37,7 @@ interface TopicsListProps {
 }
 
 export default function TopicsList({ topicList }: TopicsListProps) {
+  const { lessonsDone } = useAppSelector((state) => state.learningReducer);
   const { styles } = useStyles(stylesheet);
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
 
@@ -50,7 +53,7 @@ export default function TopicsList({ topicList }: TopicsListProps) {
       renderItem={(topics) => (
         <View style={styles.container}>
           {topics.item.map((topic) => (
-            <Step key={topic} topic={topic} onPress={onPress} />
+            <Step key={topic} topic={topic} onPress={onPress} isDone={lessonsDone.includes(topic)}/>
           ))}
         </View>
       )}

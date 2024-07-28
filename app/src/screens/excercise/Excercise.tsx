@@ -18,12 +18,15 @@ import Loading from "@components/common/Loading";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { SCREENS } from "src/constants/screens.names";
+import { useAppDispatch } from "src/hooks/hooks";
+import { learningActions } from "src/store/slices/learning";
 
 interface ExerciseScreenProps {
   route: any;
 }
 
 export default function ExerciseScreen({ route }: ExerciseScreenProps) {
+  const dispatch = useAppDispatch();
   const { navigate } = useNavigation<NativeStackNavigationProp<any>>();
   const { styles } = useStyles(stylesheet);
   const { topic } = route.params;
@@ -46,6 +49,7 @@ export default function ExerciseScreen({ route }: ExerciseScreenProps) {
 
   const onContinue = () => {
     if (isLast) {
+      dispatch(learningActions.addFinishedLesson(topic))
       navigate(SCREENS.LESSON_FINISHED);
       return;
     }
