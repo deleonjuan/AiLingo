@@ -1,6 +1,5 @@
 import Text from "@components/common/Text";
-import { useState } from "react";
-import { Pressable, View } from "react-native";
+import { View } from "react-native";
 import { createStyleSheet, useStyles } from "react-native-unistyles";
 import Tooltip from "rn-tooltip";
 

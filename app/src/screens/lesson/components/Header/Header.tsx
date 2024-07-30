@@ -1,17 +1,19 @@
-import { View } from "react-native";
+import { Pressable, View } from "react-native";
 import {
   createStyleSheet,
   UnistylesRuntime,
   useStyles,
 } from "react-native-unistyles";
 import Text from "@components/common/Text";
-import TranslatableText from "./TranslatableText";
+import TranslatableText from "@components/common/TranslatableText";
+import TopBar from "./TopBar";
 
-interface ExcerciseHeaederProps {
+interface LessonHeaderProps {
   exercise: any;
+  numberOfExercise: number
 }
 
-export default function ExcerciseHeader({ exercise }: ExcerciseHeaederProps) {
+export default function LessonHeader({ exercise, numberOfExercise }: LessonHeaderProps) {
   const { styles } = useStyles(stylesheet);
 
   const OneOfFour = () => (
@@ -40,9 +42,7 @@ export default function ExcerciseHeader({ exercise }: ExcerciseHeaederProps) {
 
   return (
     <View style={styles.header}>
-      <View>
-        <Text>X =====--------</Text>
-      </View>
+      <TopBar numberOfExercise={numberOfExercise}/>
       {exercise.modality === "1OF4" && <OneOfFour />}
       {exercise.modality === "1OF3" && <OneOfThree />}
     </View>

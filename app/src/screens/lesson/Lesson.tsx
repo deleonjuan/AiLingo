@@ -1,25 +1,26 @@
 import { useEffect, useState } from "react";
 import { View } from "react-native";
 import { useChat } from "react-native-vercel-ai";
+import { StatusBar } from "expo-status-bar";
 import {
   createStyleSheet,
   UnistylesRuntime,
   useStyles,
 } from "react-native-unistyles";
-import useExerciseHandler from "src/hooks/useExerciseHandler";
-import useChatLog from "src/hooks/useChatLog";
-import ExerciseFooter from "@screens/lesson/components/Footer";
-import ExcerciseHeader from "@screens/lesson/components/Header";
-
-import OneOfFour from "@screens/lesson/components/OneOfFour.exercise";
-import OneOfThree from "@screens/lesson/components/OneOfThree.exercise";
-import { StatusBar } from "expo-status-bar";
-import Loading from "@components/common/Loading";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { SCREENS } from "src/constants/screens.names";
+
+import useExerciseHandler from "src/hooks/useExerciseHandler";
+import useChatLog from "src/hooks/useChatLog";
 import { useAppDispatch } from "src/hooks/hooks";
+
+import ExerciseFooter from "@screens/lesson/components/Footer";
+import OneOfFour from "@screens/lesson/components/OneOfFour.exercise";
+import OneOfThree from "@screens/lesson/components/OneOfThree.exercise";
+import Loading from "@components/common/Loading";
 import { learningActions } from "src/store/slices/learning";
+import LessonHeader from "./components/Header";
 
 interface LessonScreenProps {
   route: any;
@@ -35,7 +36,7 @@ export default function LessonScreen({ route }: LessonScreenProps) {
     api: process.env.EXPO_PUBLIC_API_URL + "getLesson",
     initialInput: `iniciar leccion con tematica: ${topic}`,
   });
-  const { exercise, answerStatus, isLast, getNextExcercise, onCheckAnswer } =
+  const { exercise, answerStatus, isLast, numberOfExercise, getNextExcercise, onCheckAnswer } =
     useExerciseHandler({
       messages,
       setMessages,
@@ -74,7 +75,7 @@ export default function LessonScreen({ route }: LessonScreenProps) {
 
       {exercise && (
         <>
-          <ExcerciseHeader exercise={exercise} />
+          <LessonHeader exercise={exercise} numberOfExercise={numberOfExercise}/>
           <View style={{ flex: 3, display: "flex" }}>
             <ExerciseSelector
               content={exercise}

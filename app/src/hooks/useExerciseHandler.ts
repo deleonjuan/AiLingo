@@ -57,6 +57,7 @@ const useExerciseHandler = ({ messages, setMessages }: hookProps) => {
     onCheckAnswer,
     getNextExcercise,
     isLast: exerciseList.length === excerciseNum + 1,
+    numberOfExercise: excerciseNum,
   };
 };
 
