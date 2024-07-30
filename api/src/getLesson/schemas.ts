@@ -11,10 +11,10 @@ export const questionSchema = z
       .string()
       .array()
       .describe("seleccion de posibles respuestas"),
-    transaltions: z
+    translations: z
       .object({
         word: z.string(),
-        transaltion: z.string().array(),
+        translation: z.string().array(),
       })
       .array()
       .describe(

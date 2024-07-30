@@ -3,7 +3,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { SCREENS } from "../constants/screens.names";
 
 import HomeScreen from "@screens/home";
-import ExerciseScreen from "@screens/excercise";
+import LessonScreen from "@screens/lesson";
 import LessonFinishedScreen from "@screens/LessonFinished";
 
 const RootStack = createNativeStackNavigator({
@@ -15,8 +15,8 @@ const RootStack = createNativeStackNavigator({
     [SCREENS.HOME]: {
       screen: HomeScreen,
     },
-    [SCREENS.EXCERCISE]: {
-      screen: ExerciseScreen,
+    [SCREENS.LESSON]: {
+      screen: LessonScreen,
     },
     [SCREENS.LESSON_FINISHED]: {
       screen: LessonFinishedScreen,

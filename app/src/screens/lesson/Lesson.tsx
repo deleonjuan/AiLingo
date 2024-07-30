@@ -8,11 +8,11 @@ import {
 } from "react-native-unistyles";
 import useExerciseHandler from "src/hooks/useExerciseHandler";
 import useChatLog from "src/hooks/useChatLog";
-import ExerciseFooter from "@screens/excercise/components/Footer";
-import ExcerciseHeaeder from "@screens/excercise/components/Header";
+import ExerciseFooter from "@screens/lesson/components/Footer";
+import ExcerciseHeader from "@screens/lesson/components/Header";
 
-import OneOfFour from "@screens/excercise/components/OneOfFour.exercise";
-import OneOfThree from "@screens/excercise/components/OneOfThree.exercise";
+import OneOfFour from "@screens/lesson/components/OneOfFour.exercise";
+import OneOfThree from "@screens/lesson/components/OneOfThree.exercise";
 import { StatusBar } from "expo-status-bar";
 import Loading from "@components/common/Loading";
 import { useNavigation } from "@react-navigation/native";
@@ -21,11 +21,11 @@ import { SCREENS } from "src/constants/screens.names";
 import { useAppDispatch } from "src/hooks/hooks";
 import { learningActions } from "src/store/slices/learning";
 
-interface ExerciseScreenProps {
+interface LessonScreenProps {
   route: any;
 }
 
-export default function ExerciseScreen({ route }: ExerciseScreenProps) {
+export default function LessonScreen({ route }: LessonScreenProps) {
   const dispatch = useAppDispatch();
   const { navigate } = useNavigation<NativeStackNavigationProp<any>>();
   const { styles } = useStyles(stylesheet);
@@ -49,7 +49,7 @@ export default function ExerciseScreen({ route }: ExerciseScreenProps) {
 
   const onContinue = () => {
     if (isLast) {
-      dispatch(learningActions.addFinishedLesson(topic))
+      dispatch(learningActions.addFinishedLesson(topic));
       navigate(SCREENS.LESSON_FINISHED);
       return;
     }
@@ -74,7 +74,7 @@ export default function ExerciseScreen({ route }: ExerciseScreenProps) {
 
       {exercise && (
         <>
-          <ExcerciseHeaeder exercise={exercise} />
+          <ExcerciseHeader exercise={exercise} />
           <View style={{ flex: 3, display: "flex" }}>
             <ExerciseSelector
               content={exercise}

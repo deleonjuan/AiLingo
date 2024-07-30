@@ -42,7 +42,7 @@ export default function TopicsList({ topicList }: TopicsListProps) {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
 
   const onPress = (topic: string) => {
-    navigation.navigate(SCREENS.EXCERCISE, { topic });
+    navigation.navigate(SCREENS.LESSON, { topic });
   };
 
   return (

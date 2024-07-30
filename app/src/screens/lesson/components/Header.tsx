@@ -5,19 +5,23 @@ import {
   useStyles,
 } from "react-native-unistyles";
 import Text from "@components/common/Text";
+import TranslatableText from "./TranslatableText";
 
 interface ExcerciseHeaederProps {
   exercise: any;
 }
 
-export default function ExcerciseHeaeder({ exercise }: ExcerciseHeaederProps) {
+export default function ExcerciseHeader({ exercise }: ExcerciseHeaederProps) {
   const { styles } = useStyles(stylesheet);
 
   const OneOfFour = () => (
     <>
       <Text style={styles.headerTitle}>Traduce esta palabra:</Text>
       <View style={{ justifyContent: "center", alignItems: "center", flex: 1 }}>
-        <Text style={styles.headerTitle}>{exercise.question}</Text>
+        <TranslatableText
+          text={exercise.question}
+          translations={exercise.translations}
+        />
       </View>
     </>
   );
@@ -26,13 +30,19 @@ export default function ExcerciseHeaeder({ exercise }: ExcerciseHeaederProps) {
     <>
       <Text style={styles.headerTitle}>Traduce lo siguiente:</Text>
       <View style={{ justifyContent: "center", alignItems: "center", flex: 1 }}>
-        <Text style={styles.headerTitle}>{exercise.question}</Text>
+        <TranslatableText
+          text={exercise.question}
+          translations={exercise.translations}
+        />
       </View>
     </>
   );
 
   return (
     <View style={styles.header}>
+      <View>
+        <Text>X =====--------</Text>
+      </View>
       {exercise.modality === "1OF4" && <OneOfFour />}
       {exercise.modality === "1OF3" && <OneOfThree />}
     </View>
