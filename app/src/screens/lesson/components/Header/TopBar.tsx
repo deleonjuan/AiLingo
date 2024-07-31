@@ -5,6 +5,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { Pressable, View } from "react-native";
 import { createStyleSheet, useStyles } from "react-native-unistyles";
 import { SCREENS } from "src/constants/screens.names";
+import { useAppSelector } from "src/hooks/hooks";
 
 interface TopBarProps {
   numberOfExercise: number;
@@ -13,9 +14,11 @@ interface TopBarProps {
 export default function TopBar({ numberOfExercise }: TopBarProps) {
   const { navigate } = useNavigation<NativeStackNavigationProp<any>>();
   const { styles } = useStyles(stylesheet);
+  const { excercisesPerLesson } = useAppSelector(
+    (state) => state.learningReducer
+  );
 
-  const total = 3;
-  let progress = (100 / total) * numberOfExercise;
+  let progress = (100 / excercisesPerLesson) * numberOfExercise;
 
   return (
     <View

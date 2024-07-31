@@ -13,7 +13,7 @@ import { SCREENS } from "src/constants/screens.names";
 
 import useExerciseHandler from "src/hooks/useExerciseHandler";
 import useChatLog from "src/hooks/useChatLog";
-import { useAppDispatch } from "src/hooks/hooks";
+import { useAppDispatch, useAppSelector } from "src/hooks/hooks";
 
 import ExerciseFooter from "@screens/lesson/components/Footer";
 import OneOfFour from "@screens/lesson/components/OneOfFour.exercise";
@@ -28,19 +28,32 @@ interface LessonScreenProps {
 
 export default function LessonScreen({ route }: LessonScreenProps) {
   const dispatch = useAppDispatch();
+  const { excercisesPerLesson, wordsLearned, initialTopics } = useAppSelector(
+    (state) => state.learningReducer
+  );
   const { navigate } = useNavigation<NativeStackNavigationProp<any>>();
   const { styles } = useStyles(stylesheet);
   const { topic } = route.params;
   const [userAnswer, setUseAnswer] = useState<any>("");
   const { messages, isLoading, handleSubmit, setMessages } = useChat({
     api: process.env.EXPO_PUBLIC_API_URL + "getLesson",
-    initialInput: `iniciar leccion con tematica: ${topic}`,
+    initialInput:
+      `iniciar leccion con tematica: ${topic}, ` +
+      `el numero de ejercicios debe ser ${excercisesPerLesson}, ` +
+      `palabras aprendidas hasta ahora ${wordsLearned.toString()}, ` +
+      `topics que el usuario ya conoce: ${initialTopics.toString()}`,
   });
-  const { exercise, answerStatus, isLast, numberOfExercise, getNextExcercise, onCheckAnswer } =
-    useExerciseHandler({
-      messages,
-      setMessages,
-    });
+  const {
+    exercise,
+    answerStatus,
+    isLast,
+    numberOfExercise,
+    getNextExcercise,
+    onCheckAnswer,
+  } = useExerciseHandler({
+    messages,
+    setMessages,
+  });
   useChatLog(messages);
 
   // starts the chat automatically
@@ -49,6 +62,7 @@ export default function LessonScreen({ route }: LessonScreenProps) {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const onContinue = () => {
+    dispatch(learningActions.AddWordsLearned(exercise.question));
     if (isLast) {
       dispatch(learningActions.addFinishedLesson(topic));
       navigate(SCREENS.LESSON_FINISHED);
@@ -75,7 +89,10 @@ export default function LessonScreen({ route }: LessonScreenProps) {
 
       {exercise && (
         <>
-          <LessonHeader exercise={exercise} numberOfExercise={numberOfExercise}/>
+          <LessonHeader
+            exercise={exercise}
+            numberOfExercise={numberOfExercise}
+          />
           <View style={{ flex: 3, display: "flex" }}>
             <ExerciseSelector
               content={exercise}

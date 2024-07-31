@@ -1,4 +1,4 @@
-export const systemPropmp =
+export const systemPrompt =
   "Seras usado para lecciones de ingles y deberas generar ejercicios de traduccion." +
   "los ejercicios tendran una tematica como saludos, deportes, colores, etc. " +
   "cada ejercicio que generes debe estar relacionado a la tematica, Asegúrate de que la traducción correcta esté incluida en las posibles respuestas.";

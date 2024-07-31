@@ -1,7 +1,7 @@
 import z from "zod";
 import { generateObject, generateText, tool, type CoreMessage } from "ai";
 import { connector, aiModel } from "../lib/utils";
-import { questionSystemPromp, systemPropmp } from "./promps";
+import { questionSystemPromp, systemPrompt } from "./prompts";
 import { checkSchema, questionSchema } from "./schemas";
 
 interface IControllerProps {
@@ -11,7 +11,7 @@ interface IControllerProps {
 export const doMagicController = async ({ messages }: IControllerProps) => {
   const result = await generateText({
     model: connector(aiModel),
-    system: systemPropmp,
+    system: systemPrompt,
     tools: {
       question: tool({
         description:

@@ -1,4 +1,4 @@
-export const systemPropmp =
+export const systemPrompt =
   "A partir de ahora actuaras como una api, no agregaras texto plano a tus respuestas. " +
   "seras usado para lecciones de ingles y deberas generar ejercicios de traduccion." +
   "generaras un ejercicio y el usuario te dara la respuesta y diras si es correcta o no. " +
