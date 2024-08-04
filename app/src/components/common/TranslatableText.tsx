@@ -12,13 +12,15 @@ export default function TranslatableText({
   text,
   translations,
 }: TranslatableTextProps) {
+  console.log("🚀 ~ translations:", translations)
   const { styles } = useStyles(stylesheet);
   const words = text.split(" ");
 
   const TranslationBox = ({ word }: { word: string }) => {
-    const { translation } = translations?.find((w) => w.word === word) || {
+    const { translation } = translations?.find((w) => w.word.includes(word)) || {
       translation: [],
     };
+    console.log("🚀 ~ const{translation}=translations?.find ~ translation:", translation)
 
     return (
       <>

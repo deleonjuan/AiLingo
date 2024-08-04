@@ -18,7 +18,7 @@ export const questionSchema = z
       })
       .array()
       .describe(
-        "lista de las palabras usadas en la pregunta y las posibles traducciones correctas de cada palabra"
+        "lista de palabras usadas en la pregunta/frase que el usuario debe traducir y las posibles traducciones correctas de cada palabra"
       ),
   })
   .array();

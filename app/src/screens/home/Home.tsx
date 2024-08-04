@@ -1,4 +1,4 @@
-import { LayoutChangeEvent, ScrollView, View } from "react-native";
+import { LayoutChangeEvent, Pressable, ScrollView, View } from "react-native";
 import Text from "@components/common/Text";
 import {
   createStyleSheet,
@@ -15,7 +15,6 @@ import { isEmpty } from "lodash";
 import { learningActions } from "src/store/slices/learning";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { SCREENS } from "src/constants/screens.names";
 
 export default function HomeScreen() {
   const dispatch = useAppDispatch();
@@ -51,10 +50,6 @@ export default function HomeScreen() {
     }
   }, [messages]);
 
-  // useEffect(() => {
-  //   if (!username) navigate(SCREENS.WELCOME);
-  // }, []);
-
   return (
     <View style={styles.page}>
       <StatusBar style="light" translucent={true} />
@@ -64,7 +59,9 @@ export default function HomeScreen() {
           <View style={styles.languajeBadge}>
             <Text>English</Text>
           </View>
-          <View style={styles.userCircle}></View>
+          <View style={styles.userCircle}>
+            <Text>{username ? username[0] : ""}</Text>
+          </View>
         </View>
         <View style={styles.headerTitleSection}>
           <Text style={styles.headerTitle}>Hola {username},</Text>
@@ -125,6 +122,9 @@ const stylesheet = createStyleSheet((theme) => ({
     height: 32,
     backgroundColor: theme.colors.bgGray,
     borderRadius: 20,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
   },
   page: {
     height: UnistylesRuntime.screen.height + UnistylesRuntime.statusBar.height,

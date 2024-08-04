@@ -16,7 +16,7 @@ export default function Loading() {
       }}
     >
       <Image
-        source={{ uri: "https://i.giphy.com/tA4R6biK5nlBVXeR7w.webp" }}
+        source={{ uri: "https://i.giphy.com/l0MYtKkFdVsaRN4J2.webp" }}
         style={{ width: sWidth / 2, height: sWidth / 2 }}
       />
       <Text style={{ fontSize: 24 }}>Wait a moment...</Text>
