@@ -8,8 +8,19 @@ import { useFonts } from "expo-font";
 import { Provider } from "react-redux";
 import store, { persistor } from "src/store";
 import { PersistGate } from "redux-persist/integration/react";
+import { useAppSelector } from "src/hooks/hooks";
+import { SignInContext } from "src/navigation/Navigation";
 
 SplashScreen.preventAutoHideAsync();
+
+const Auth = () => {
+  const { username } = useAppSelector((state) => state.authReducer);
+  return (
+    <SignInContext.Provider value={username !== null}>
+      <Navigator />
+    </SignInContext.Provider>
+  );
+};
 
 export default function App() {
   // load theme
@@ -36,7 +47,7 @@ export default function App() {
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <NavigationContainer>
-          <Navigator />
+          <Auth />
         </NavigationContainer>
       </PersistGate>
     </Provider>

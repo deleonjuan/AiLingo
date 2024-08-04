@@ -2,19 +2,19 @@ import { combineReducers } from "@reduxjs/toolkit";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { persistReducer } from "redux-persist";
 
-import learningReducer, {
-  REDUCER_NAME as LEARNING_REDUCER,
-} from "./slices/learning";
+import learningReducer, { REDUCER_NAME as LEARNING } from "./slices/learning";
+import authReducer, { REDUCER_NAME as AUTH } from "./slices/auth";
 
 export const appReducer = combineReducers({
   learningReducer,
+  authReducer,
 });
 
 const persistConfig = {
   key: "root",
   version: 1,
   storage: AsyncStorage,
-  blacklist: [LEARNING_REDUCER],
+  blacklist: [LEARNING, AUTH],
 };
 
 const rootReducer = (state: any, action: any) => {

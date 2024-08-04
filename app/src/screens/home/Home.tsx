@@ -13,10 +13,15 @@ import Loading from "@components/common/Loading";
 import { useAppDispatch, useAppSelector } from "src/hooks/hooks";
 import { isEmpty } from "lodash";
 import { learningActions } from "src/store/slices/learning";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { SCREENS } from "src/constants/screens.names";
 
 export default function HomeScreen() {
   const dispatch = useAppDispatch();
+  const { navigate } = useNavigation<NativeStackNavigationProp<any>>();
   const { initialTopics } = useAppSelector((state) => state.learningReducer);
+  const { username } = useAppSelector((state) => state.authReducer);
   const { styles } = useStyles(stylesheet);
   const [headerH, setHeaderH] = useState<number>(0);
   const [topics, setTopics] = useState<any[]>([]);
@@ -46,6 +51,10 @@ export default function HomeScreen() {
     }
   }, [messages]);
 
+  // useEffect(() => {
+  //   if (!username) navigate(SCREENS.WELCOME);
+  // }, []);
+
   return (
     <View style={styles.page}>
       <StatusBar style="light" translucent={true} />
@@ -58,10 +67,11 @@ export default function HomeScreen() {
           <View style={styles.userCircle}></View>
         </View>
         <View style={styles.headerTitleSection}>
-          <Text style={styles.headerTitle}>Hola John Doe,</Text>
+          <Text style={styles.headerTitle}>Hola {username},</Text>
           <Text style={styles.headerTitle}>Listo para aprender?</Text>
         </View>
       </View>
+
       {!isLoading && topics.length > 0 ? (
         <ScrollView
           style={{ height: "100%" }}
@@ -80,7 +90,7 @@ export default function HomeScreen() {
 const stylesheet = createStyleSheet((theme) => ({
   header: {
     paddingTop: UnistylesRuntime.statusBar.height + 8,
-    backgroundColor: `${theme.colors.bgBlack}f`,
+    backgroundColor: `${theme.colors.bgBlack}E`,
     paddingHorizontal: 12,
     position: "absolute",
     top: 0,
