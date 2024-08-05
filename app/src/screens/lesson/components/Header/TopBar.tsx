@@ -1,5 +1,4 @@
 import Icon from "@components/common/Icon";
-import Text from "@components/common/Text";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { Pressable, View } from "react-native";
@@ -30,7 +29,7 @@ export default function TopBar({ numberOfExercise }: TopBarProps) {
       }}
     >
       <Pressable
-        onPress={() => navigate(SCREENS.HOME)}
+        onPress={() => navigate("RootTabs", { screen: SCREENS.HOME })}
         style={{ paddingRight: 8 }}
       >
         <Icon name="x" color="white" size={28} />

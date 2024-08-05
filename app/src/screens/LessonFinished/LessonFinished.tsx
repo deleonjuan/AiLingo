@@ -14,7 +14,7 @@ import { SCREENS } from "src/constants/screens.names";
 export default function LessonFinishedScreen() {
   const { styles } = useStyles(stylesheet);
   const { navigate } = useNavigation<NativeStackNavigationProp<any>>();
-  const onFinish = () => navigate(SCREENS.HOME);
+  const onFinish = () => navigate("RootTabs", {screen: SCREENS.HOME});
 
   return (
     <View style={styles.page}>

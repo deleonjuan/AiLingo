@@ -10,6 +10,7 @@ import store, { persistor } from "src/store";
 import { PersistGate } from "redux-persist/integration/react";
 import { useAppSelector } from "src/hooks/hooks";
 import { SignInContext } from "src/navigation/Navigation";
+import { StatusBar } from "expo-status-bar";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -17,6 +18,7 @@ const Auth = () => {
   const { username } = useAppSelector((state) => state.authReducer);
   return (
     <SignInContext.Provider value={username !== null}>
+      <StatusBar style="light" translucent={true} />
       <Navigator />
     </SignInContext.Provider>
   );

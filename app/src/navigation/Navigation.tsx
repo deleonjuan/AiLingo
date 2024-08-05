@@ -1,13 +1,17 @@
+import { StyleSheet, View } from "react-native";
 import { createComponentForStaticNavigation } from "@react-navigation/native";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { SCREENS } from "../constants/screens.names";
+import { createContext, useContext } from "react";
 
+import Icon from "@components/common/Icon";
+import { gemini } from "src/utils/theme";
+import { SCREENS } from "../constants/screens.names";
 import HomeScreen from "@screens/home";
 import LessonScreen from "@screens/lesson";
 import LessonFinishedScreen from "@screens/LessonFinished";
-import HelloScreen from "@screens/hello";
 import WelcomeScreen from "@screens/welcome";
-import { createContext, useContext } from "react";
+import ChatScreen from "@screens/chat";
 
 export const SignInContext = createContext(false);
 function useIsSignedIn() {
@@ -19,8 +23,51 @@ function useIsSignedOut() {
   return !isSignedIn;
 }
 
+const HomeStack = createNativeStackNavigator({
+  screenOptions: {
+    headerShown: false,
+  },
+  screens: {
+    [SCREENS.HOME]: {
+      screen: HomeScreen,
+    },
+  },
+});
+
+const RootTabs = createBottomTabNavigator({
+  initialRouteName: "homeStack",
+  screenOptions: {
+    headerShown: false,
+    tabBarActiveTintColor: gemini.colors.duoGreen,
+    tabBarBackground: () => (
+      <View style={[StyleSheet.absoluteFill, { backgroundColor: "black" }]} />
+    ),
+  },
+  screens: {
+    homeStack: {
+      screen: HomeStack,
+      options: {
+        tabBarLabel: "home",
+        tabBarIcon: ({ color }) => <Icon name="home" color={color} />,
+      },
+    },
+    chatStack: {
+      screen: ChatScreen,
+      options: {
+        tabBarLabel: "chat",
+        tabBarIcon: ({ color }) => <Icon name="message-circle" color={color} />,
+      },
+      listeners: ({ navigation }) => ({
+        tabPress: (e) => {
+          e.preventDefault();
+          navigation.navigate(SCREENS.CHAT);
+        },
+      }),
+    },
+  },
+});
+
 const RootStack = createNativeStackNavigator({
-  // initialRouteName: SCREENS.HOME,
   screenOptions: {
     headerShown: false,
   },
@@ -28,14 +75,15 @@ const RootStack = createNativeStackNavigator({
     SignedIn: {
       if: useIsSignedIn,
       screens: {
-        [SCREENS.HOME]: {
-          screen: HomeScreen,
-        },
+        RootTabs,
         [SCREENS.LESSON]: {
           screen: LessonScreen,
         },
         [SCREENS.LESSON_FINISHED]: {
           screen: LessonFinishedScreen,
+        },
+        [SCREENS.CHAT]: {
+          screen: ChatScreen,
         },
       },
     },
@@ -46,11 +94,6 @@ const RootStack = createNativeStackNavigator({
           screen: WelcomeScreen,
         },
       },
-    },
-  },
-  screens: {
-    [SCREENS.HELLO]: {
-      screen: HelloScreen,
     },
   },
 });

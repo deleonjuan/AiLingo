@@ -1,4 +1,4 @@
-import { LayoutChangeEvent, Pressable, ScrollView, View } from "react-native";
+import { LayoutChangeEvent, ScrollView, View } from "react-native";
 import Text from "@components/common/Text";
 import {
   createStyleSheet,
@@ -13,12 +13,9 @@ import Loading from "@components/common/Loading";
 import { useAppDispatch, useAppSelector } from "src/hooks/hooks";
 import { isEmpty } from "lodash";
 import { learningActions } from "src/store/slices/learning";
-import { useNavigation } from "@react-navigation/native";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 export default function HomeScreen() {
   const dispatch = useAppDispatch();
-  const { navigate } = useNavigation<NativeStackNavigationProp<any>>();
   const { initialTopics } = useAppSelector((state) => state.learningReducer);
   const { username } = useAppSelector((state) => state.authReducer);
   const { styles } = useStyles(stylesheet);
