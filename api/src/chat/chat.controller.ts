@@ -1,34 +1,27 @@
-import { generateObject, generateText, tool, type CoreMessage } from "ai";
+import { generateObject, type CoreMessage } from "ai";
 import { aiModel, connector } from "../lib/utils";
-import z from "zod";
+import { messageSchema } from "./schemas";
 
 interface IControllerProps {
   messages: CoreMessage[] | undefined;
 }
 
-export const messageSchema = z.object({
-  feedback: z
-    .string()
-    .optional()
-    .nullable()
-    .describe("retroalimentación o correccion de errores gramaticales, de pronunciación o de vocabulario, evita hacer nuevas preguntas aqui"),
-  nextMessage: z
-    .string()
-    .describe("siguiente mensaje para continuar con la conversacion"),
-});
+const topics = "greetings, family, food, places, sports"
 
 export const chatController = async ({ messages }: IControllerProps) => {
-  console.log("🚀 ~ chatController ~ messages:", messages)
+  console.log("🚀 ~ chatController ~ messages:", messages);
   const result = await generateObject({
     model: connector(aiModel),
     schema: messageSchema,
     system:
       `Ahora eres un chat especializado en enseñar idiomas, ` +
       `el idioma que debes enseñar es ingles, ` +
-      `realiza preguntas abiertas y cerradas relacionadas con el tema elegido, ` +
+      `elige un tema inicial con el que puedas tener una conversacion basica, ` +
+      `los temas que puedes elejir son: ${topics}. ` +
+      `Realiza preguntas abiertas y cerradas relacionadas con el tema elegido, ` +
       `proporciona retroalimentación, corrigiendo errores gramaticales, de pronunciación o de vocabulario, ` +
       `sugiere frases alternativas y explica por qué una corrección es necesaria.`,
-    messages
+    messages,
   });
 
   return result.object;

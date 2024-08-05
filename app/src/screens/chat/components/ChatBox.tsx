@@ -1,8 +1,9 @@
 import Text from "@components/common/Text";
 import { isString } from "lodash";
-import { FlatList, View } from "react-native";
+import { Dimensions, FlatList, View } from "react-native";
 import { createStyleSheet, useStyles } from "react-native-unistyles";
 import { IChatMessage } from "../message";
+import { useRef } from "react";
 
 const Message = ({ item }: { item: IChatMessage }) => {
   const { styles } = useStyles(stylesheet, {
@@ -25,13 +26,24 @@ interface ChatBoxProps {
 }
 
 export default function ChatBox({ messages }: ChatBoxProps) {
+  const flatListRef = useRef<FlatList<any>>(null);
+
+  const scrollToEnd = () => {
+    if (flatListRef.current) {
+      flatListRef.current.scrollToEnd({ animated: true });
+    }
+  };
+
   return (
     <FlatList
+      ref={flatListRef}
       style={{ paddingHorizontal: 12 }}
       data={messages}
       keyExtractor={(message) => message.id}
       renderItem={({ item }) => <Message item={item} />}
-      ListHeaderComponent={<View style={{marginTop: 16}}/>}
+      ListHeaderComponent={<View style={{ marginTop: 16 }} />}
+      onContentSizeChange={scrollToEnd}
+      onLayout={scrollToEnd}
     />
   );
 }
@@ -56,7 +68,7 @@ const stylesheet = createStyleSheet((theme) => ({
     borderRadius: 8,
     paddingHorizontal: 16,
     paddingVertical: 5,
-    maxWidth: '90%',
+    maxWidth: "90%",
     variants: {
       bgColor: {
         user: {

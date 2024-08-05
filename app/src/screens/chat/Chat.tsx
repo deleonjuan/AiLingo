@@ -26,7 +26,7 @@ export default function ChatScreen() {
   const { messages, isLoading, handleSubmit, setInput, input, setMessages } =
     useChat({
       api: process.env.EXPO_PUBLIC_API_URL + "chat",
-      initialInput: "inicia una conversacion sobre comida",
+      initialInput: "Hello!",
     });
   const { navigate } = useNavigation<NativeStackNavigationProp<any>>();
 
