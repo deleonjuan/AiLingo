@@ -50,10 +50,10 @@ El proyecto consta de dos carpetas principales:
 4.  **Indica la url de la api**
 
     ```sh
-    touch .env
+    touch .env.local
     ```
 
-    Abre el archivo `.env` en tu editor de texto favorito y agrega la siguiente línea:
+    Abre el archivo `.env.local` en tu editor de texto favorito y agrega la siguiente línea:
 
     ```env
     EXPO_PUBLIC_API_URL=http://192.168.1.70:4321/api/
