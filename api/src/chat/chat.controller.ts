@@ -1,15 +1,15 @@
-import { generateObject, type CoreMessage } from "ai";
-import { aiModel, connector } from "../lib/utils";
+import { generateObject } from "ai";
+import { aiModel, getConnector } from "../lib/utils";
 import { messageSchema } from "./schemas";
+import { type IControllerProps } from "../lib/controllerType";
 
-interface IControllerProps {
-  messages: CoreMessage[] | undefined;
-}
+const topics = "greetings, family, food, places, sports";
 
-const topics = "greetings, family, food, places, sports"
-
-export const chatController = async ({ messages }: IControllerProps) => {
-  console.log("🚀 ~ chatController ~ messages:", messages);
+export const chatController = async ({
+  messages,
+  headers,
+}: IControllerProps) => {
+  const connector = getConnector(headers);
   const result = await generateObject({
     model: connector(aiModel),
     schema: messageSchema,

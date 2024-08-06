@@ -14,7 +14,7 @@ const persistConfig = {
   key: "root",
   version: 1,
   storage: AsyncStorage,
-  blacklist: [LEARNING, AUTH],
+  whitelist: [LEARNING, AUTH],
 };
 
 const rootReducer = (state: any, action: any) => {

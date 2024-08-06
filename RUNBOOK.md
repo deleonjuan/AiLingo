@@ -47,7 +47,27 @@ El proyecto consta de dos carpetas principales:
     npm run prebuild
     ```
 
-4.  **Ejecuta la aplicación:**
+4.  **Indica la url de la api**
+
+    ```sh
+    touch .env
+    ```
+
+    Abre el archivo `.env` en tu editor de texto favorito y agrega la siguiente línea:
+
+    ```env
+    EXPO_PUBLIC_API_URL=http://192.168.1.70:4321/api/
+    ```
+
+    > [!NOTE]  
+    > durante el mes de agosto 2024 habrá un servicio disponible que podrás usar, \
+    > sin embargo debes proveer tu propia api key de google gemini desde la aplicación \
+    > EXPO_PUBLIC_API_URL=https://ai-lingo-mauve.vercel.app/api/ \
+    > si apuntas a este servicio no sera necesario hacer funcionar el backend, pues estaras usando la version de la nube
+
+    by default the astro app exposes the api to the local network and the api path is `/api`
+
+5.  **Ejecuta la aplicación:**
 
     - Para dispositivos Android:
 
@@ -60,20 +80,6 @@ El proyecto consta de dos carpetas principales:
       ```sh
       npm run ios
       ```
-
-5.  **Indica la url de la api**
-
-    ```sh
-    touch .env
-    ```
-
-    Abre el archivo `.env` en tu editor de texto favorito y agrega la siguiente línea:
-
-    ```env
-    EXPO_PUBLIC_API_URL=http://192.168.1.70:4321/api/
-    ```
-
-    by default the astro app exposes the api to the local network and the api path is `/api`
 
 ### Configuración de la Aplicación Backend (api)
 
@@ -94,6 +100,9 @@ El proyecto consta de dos carpetas principales:
    ```env
    GOOGLE_GENERATIVE_AI_API_KEY=<tu_api_key_aqui>
    ```
+
+   > [!IMPORTANT]  
+   > Si provees una api key desde la app, esta sera tomada en vez de la declarada en el archivo `.env`
 
 3. **Instala las dependencias:**
 

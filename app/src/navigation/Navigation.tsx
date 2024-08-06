@@ -12,6 +12,7 @@ import LessonScreen from "@screens/lesson";
 import LessonFinishedScreen from "@screens/LessonFinished";
 import WelcomeScreen from "@screens/welcome";
 import ChatScreen from "@screens/chat";
+import SettingsScreen from "@screens/settings";
 
 export const SignInContext = createContext(false);
 function useIsSignedIn() {
@@ -64,6 +65,13 @@ const RootTabs = createBottomTabNavigator({
         },
       }),
     },
+    [SCREENS.SETTINGS]: {
+      screen: SettingsScreen,
+      options: {
+        tabBarLabel: "Settings",
+        tabBarIcon: ({ color }) => <Icon name="settings" color={color} />,
+      },
+    },
   },
 });
 
@@ -71,6 +79,7 @@ const RootStack = createNativeStackNavigator({
   screenOptions: {
     headerShown: false,
   },
+  screens: {},
   groups: {
     SignedIn: {
       if: useIsSignedIn,

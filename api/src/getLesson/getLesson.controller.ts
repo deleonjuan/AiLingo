@@ -1,14 +1,15 @@
-import { generateObject, generateText, tool, type CoreMessage } from "ai";
-import { aiModel, connector } from "../lib/utils";
+import { generateObject, generateText, tool } from "ai";
+import { aiModel, getConnector } from "../lib/utils";
 import z from "zod";
 import { questionSystemPromp, systemPrompt } from "./prompts";
 import { questionSchema } from "./schemas";
+import { type IControllerProps } from "../lib/controllerType";
 
-interface IControllerProps {
-  messages: CoreMessage[] | undefined;
-}
-
-export const getLessonController = async ({ messages }: IControllerProps) => {
+export const getLessonController = async ({
+  messages,
+  headers,
+}: IControllerProps) => {
+  const connector = getConnector(headers);
   const result = await generateText({
     model: connector(aiModel),
     system: systemPrompt,
@@ -19,11 +20,18 @@ export const getLessonController = async ({ messages }: IControllerProps) => {
         description: "Genera una lista de ejercicios",
         parameters: z.object({
           tematica: z.string().describe("la tematica de la pregunta"),
-          numberOfExercises: z.string().describe("numero de ejercicios que se deben generar"),
+          numberOfExercises: z
+            .string()
+            .describe("numero de ejercicios que se deben generar"),
           wordsLearned: z.string().describe("palabras que el usuario ya sabe"),
           initialTopics: z.string().describe("topics que el usuario ya sabe"),
         }),
-        execute: async ({ tematica, numberOfExercises, wordsLearned, initialTopics }) => {
+        execute: async ({
+          tematica,
+          numberOfExercises,
+          wordsLearned,
+          initialTopics,
+        }) => {
           return await generateObject({
             model: connector(aiModel),
             system: questionSystemPromp,

@@ -28,6 +28,7 @@ interface LessonScreenProps {
 
 export default function LessonScreen({ route }: LessonScreenProps) {
   const dispatch = useAppDispatch();
+  const { apiKey } = useAppSelector((state) => state.authReducer);
   const { excercisesPerLesson, wordsLearned, initialTopics } = useAppSelector(
     (state) => state.learningReducer
   );
@@ -58,7 +59,16 @@ export default function LessonScreen({ route }: LessonScreenProps) {
 
   // starts the chat automatically
   useEffect(() => {
-    handleSubmit({});
+    handleSubmit(
+      {},
+      {
+        options: {
+          headers: {
+            apiKey,
+          },
+        },
+      }
+    );
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const onContinue = () => {

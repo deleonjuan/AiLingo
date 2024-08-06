@@ -5,11 +5,13 @@ export const REDUCER_NAME = "authReducer";
 interface authState {
   isLoading: boolean;
   username: string | null;
+  apiKey: string;
 }
 
 const initialState: authState = {
   isLoading: false,
   username: null,
+  apiKey: "",
 };
 
 const slice = createSlice({
@@ -21,6 +23,9 @@ const slice = createSlice({
     },
     setUserName: (state, { payload }) => {
       state.username = payload;
+    },
+    setApiKey: (state, { payload }) => {
+      state.apiKey = payload;
     },
   },
 });

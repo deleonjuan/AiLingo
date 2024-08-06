@@ -1,4 +1,4 @@
-import { LayoutChangeEvent, ScrollView, View } from "react-native";
+import { LayoutChangeEvent, Pressable, ScrollView, View } from "react-native";
 import Text from "@components/common/Text";
 import {
   createStyleSheet,
@@ -13,15 +13,17 @@ import Loading from "@components/common/Loading";
 import { useAppDispatch, useAppSelector } from "src/hooks/hooks";
 import { isEmpty } from "lodash";
 import { learningActions } from "src/store/slices/learning";
+import Error from "@components/common/Error";
+import Icon from "@components/common/Icon";
 
 export default function HomeScreen() {
   const dispatch = useAppDispatch();
   const { initialTopics } = useAppSelector((state) => state.learningReducer);
-  const { username } = useAppSelector((state) => state.authReducer);
+  const { username, apiKey } = useAppSelector((state) => state.authReducer);
   const { styles } = useStyles(stylesheet);
   const [headerH, setHeaderH] = useState<number>(0);
   const [topics, setTopics] = useState<any[]>([]);
-  const { messages, isLoading, handleSubmit } = useChat({
+  const { messages, isLoading, handleSubmit, error, reload } = useChat({
     api: process.env.EXPO_PUBLIC_API_URL + "getTopics",
     initialInput: "start",
   });
@@ -30,11 +32,18 @@ export default function HomeScreen() {
     setHeaderH(e.nativeEvent.layout.height);
   };
 
+  const options = {
+    options: {
+      headers: {
+        apiKey,
+      },
+    },
+  };
   // uses topics stored in redux
   // if no topics call the api
   useEffect(() => {
     if (!isEmpty(initialTopics)) setTopics(initialTopics);
-    else handleSubmit({});
+    else handleSubmit({}, options);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
@@ -56,8 +65,22 @@ export default function HomeScreen() {
           <View style={styles.languajeBadge}>
             <Text>English</Text>
           </View>
-          <View style={styles.userCircle}>
-            <Text>{username ? username[0] : ""}</Text>
+          <View
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+            }}
+          >
+            <Pressable
+              style={{ marginEnd: 16 }}
+              onPress={() => reload(options)}
+            >
+              <Icon name="refresh-cw" color="white" />
+            </Pressable>
+            <View style={styles.userCircle}>
+              <Text>{username ? username[0] : ""}</Text>
+            </View>
           </View>
         </View>
         <View style={styles.headerTitleSection}>
@@ -66,7 +89,7 @@ export default function HomeScreen() {
         </View>
       </View>
 
-      {!isLoading && topics.length > 0 ? (
+      {!isLoading && !error && topics.length > 0 && (
         <ScrollView
           style={{ height: "100%" }}
           showsVerticalScrollIndicator={false}
@@ -74,9 +97,11 @@ export default function HomeScreen() {
           <View style={{ height: headerH + 50 }} />
           <TopicsList topicList={topics} />
         </ScrollView>
-      ) : (
-        <Loading />
       )}
+
+      {!isLoading && error && <Error />}
+
+      {isLoading && <Loading />}
     </View>
   );
 }

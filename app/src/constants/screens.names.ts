@@ -4,5 +4,6 @@ export const SCREENS = {
   LESSON_FINISHED: "lessonFinished",
   WELCOME: "welcome",
   CHAT: "chat",
+  SETTINGS: "settings",
   HELLO: "hello",
 };

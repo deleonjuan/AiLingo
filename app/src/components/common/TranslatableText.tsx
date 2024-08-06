@@ -12,7 +12,6 @@ export default function TranslatableText({
   text,
   translations,
 }: TranslatableTextProps) {
-  console.log("🚀 ~ translations:", translations)
   const { styles } = useStyles(stylesheet);
   const words = text.split(" ");
 
@@ -20,7 +19,6 @@ export default function TranslatableText({
     const { translation } = translations?.find((w) => w.word.includes(word)) || {
       translation: [],
     };
-    console.log("🚀 ~ const{translation}=translations?.find ~ translation:", translation)
 
     return (
       <>

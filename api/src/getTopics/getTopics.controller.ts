@@ -1,13 +1,12 @@
-import { generateObject, type CoreMessage } from "ai";
-import { connector, aiModel } from "../lib/utils";
+import { generateObject } from "ai";
+import { aiModel, getConnector } from "../lib/utils";
 import { systemPrompt } from "./prompts";
 import { topicsSchema } from "./schemas";
+import { type IControllerProps } from "../lib/controllerType";
 
-interface IControllerProps {
-  messages?: CoreMessage[] | undefined;
-}
+export const getTopicsController = async ({ headers }: IControllerProps) => {
+  const connector = getConnector(headers);
 
-export const getTopicsController = async (_props: IControllerProps) => {
   const result = await generateObject({
     model: connector(aiModel),
     schema: topicsSchema,

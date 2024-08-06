@@ -1,34 +1,30 @@
 import Text from "@components/common/Text";
-// import { useNavigation } from "@react-navigation/native";
-// import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import TextInput from "@components/common/TextInput";
 import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useState } from "react";
-import {
-  KeyboardAvoidingView,
-  Platform,
-  Pressable,
-  TextInput,
-  View,
-} from "react-native";
+import { KeyboardAvoidingView, Platform, Pressable, View } from "react-native";
 import { createStyleSheet, useStyles } from "react-native-unistyles";
-// import { SCREENS } from "src/constants/screens.names";
 import { useAppDispatch } from "src/hooks/hooks";
 import { authActions } from "src/store/slices/auth";
 
 export default function WelcomeScreen() {
-  const { styles, theme } = useStyles(stylesheet);
-  const [username, setUsername] = useState<string>("");
+  const [username, setUsername] = useState<string | null>(null);
+  const [apiKey, setApiKey] = useState<string>("");
   const [isUserValid, setIsUserValid] = useState<boolean>(false);
-  // const { navigate } = useNavigation<NativeStackNavigationProp<any>>();
   const dispatch = useAppDispatch();
-  
+  const { styles } = useStyles(stylesheet, {
+    bg: isUserValid,
+    color: isUserValid,
+  });
+
   const onContinue = () => {
+    if (!username && !apiKey) return;
+    dispatch(authActions.setApiKey(apiKey));
     dispatch(authActions.setUserName(username));
-    // navigate(SCREENS.HOME);
   };
 
   useEffect(() => {
-    if (username.length > 2) setIsUserValid(true);
+    if (username && username.length > 2) setIsUserValid(true);
     else setIsUserValid(false);
   }, [username]);
 
@@ -45,33 +41,21 @@ export default function WelcomeScreen() {
 
           <TextInput
             onChangeText={setUsername}
-            value={username}
-            style={styles.input}
+            value={username || ""}
             placeholderTextColor={"gray"}
             placeholder="Tu nombre"
           />
 
+          <TextInput
+            onChangeText={setApiKey}
+            value={apiKey || ""}
+            placeholderTextColor={"gray"}
+            placeholder="google gemini api key"
+          />
+
           <View style={styles.buttonContainer}>
-            <Pressable
-              onPress={onContinue}
-              style={[
-                styles.nextButton,
-                {
-                  backgroundColor: isUserValid
-                    ? theme.colors.duoGreen
-                    : theme.colors.bgGray,
-                },
-              ]}
-            >
-              <Text
-                style={{
-                  color: isUserValid
-                    ? theme.colors.text
-                    : theme.colors.bgLightGray,
-                }}
-              >
-                continuar
-              </Text>
+            <Pressable onPress={onContinue} style={styles.nextButton}>
+              <Text style={styles.nextButtonText}>continuar</Text>
             </Pressable>
           </View>
         </View>
@@ -109,5 +93,27 @@ const stylesheet = createStyleSheet((theme) => ({
     paddingVertical: 8,
     backgroundColor: theme.colors.duoGreen,
     borderRadius: 50,
+    variants: {
+      bg: {
+        true: {
+          backgroundColor: theme.colors.duoGreen,
+        },
+        false: {
+          backgroundColor: theme.colors.bgGray,
+        },
+      },
+    },
+  },
+  nextButtonText: {
+    variants: {
+      color: {
+        true: {
+          color: theme.colors.text,
+        },
+        false: {
+          color: theme.colors.bgLightGray,
+        },
+      },
+    },
   },
 }));

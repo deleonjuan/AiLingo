@@ -20,14 +20,24 @@ import { IChatMessage } from "./message";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { SCREENS } from "src/constants/screens.names";
+import { useAppSelector } from "src/hooks/hooks";
+import Error from "@components/common/Error";
 
 export default function ChatScreen() {
+  const { apiKey } = useAppSelector((state) => state.authReducer);
   const { styles, theme } = useStyles(stylesheet);
-  const { messages, isLoading, handleSubmit, setInput, input, setMessages } =
-    useChat({
-      api: process.env.EXPO_PUBLIC_API_URL + "chat",
-      initialInput: "Hello!",
-    });
+  const {
+    messages,
+    isLoading,
+    handleSubmit,
+    setInput,
+    input,
+    setMessages,
+    error,
+  } = useChat({
+    api: process.env.EXPO_PUBLIC_API_URL + "chat",
+    initialInput: "Hello!",
+  });
   const { navigate } = useNavigation<NativeStackNavigationProp<any>>();
 
   const { messageList } = useChatHandler({
@@ -35,12 +45,20 @@ export default function ChatScreen() {
     setMessages,
   });
 
+  const options = {
+    options: {
+      headers: {
+        apiKey,
+      },
+    },
+  };
+
   const onSendMessage = () => {
-    if (!isLoading) handleSubmit({});
+    if (!isLoading) handleSubmit({}, options);
   };
 
   useEffect(() => {
-    handleSubmit({});
+    handleSubmit({}, options);
   }, []);
 
   return (
@@ -66,25 +84,29 @@ export default function ChatScreen() {
           >
             <Icon size={32} name="chevron-left" color="white" />
           </Pressable>
-          <Text style={{ fontSize: 32, textAlignVertical: "center" }}>AI</Text>
+          <Text style={{ fontSize: 32, textAlignVertical: "center" }}>Lingo</Text>
         </View>
       </View>
 
-      <ChatBox messages={messageList} />
+      {!isLoading && error && <Error />}
+
+      {!error && <ChatBox messages={messageList} />}
 
       {/*TEXT INPUT */}
-      <View style={styles.bottomActionsContainer}>
-        <TextInput
-          onChangeText={setInput}
-          value={input}
-          style={styles.textInput}
-          placeholderTextColor={theme.colors.bgLightGray}
-          placeholder="mensaje"
-        />
-        <Pressable onPress={onSendMessage} style={styles.sendButton}>
-          <Icon name="send" color="white" />
-        </Pressable>
-      </View>
+      {!error && (
+        <View style={styles.bottomActionsContainer}>
+          <TextInput
+            onChangeText={setInput}
+            value={input}
+            style={styles.textInput}
+            placeholderTextColor={theme.colors.bgLightGray}
+            placeholder="mensaje"
+          />
+          <Pressable onPress={onSendMessage} style={styles.sendButton}>
+            <Icon name="send" color="white" />
+          </Pressable>
+        </View>
+      )}
     </KeyboardAvoidingView>
   );
 }

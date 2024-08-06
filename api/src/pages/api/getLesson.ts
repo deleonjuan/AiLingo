@@ -4,7 +4,10 @@ import { getLessonController } from "../../getLesson/getLesson.controller";
 
 export const POST: APIRoute = async ({ request }) => {
   const { messages } = await request.json();
-  const result = await getLessonController({ messages });
+  const result = await getLessonController({
+    messages,
+    headers: request.headers,
+  });
 
   return new Response(
     JSON.stringify({
