@@ -1,4 +1,10 @@
-import { LayoutChangeEvent, Pressable, ScrollView, View } from "react-native";
+import {
+  LayoutChangeEvent,
+  Platform,
+  Pressable,
+  ScrollView,
+  View,
+} from "react-native";
 import Text from "@components/common/Text";
 import {
   createStyleSheet,
@@ -23,10 +29,11 @@ export default function HomeScreen() {
   const { styles } = useStyles(stylesheet);
   const [headerH, setHeaderH] = useState<number>(0);
   const [topics, setTopics] = useState<any[]>([]);
-  const { messages, isLoading, handleSubmit, error, reload } = useChat({
-    api: process.env.EXPO_PUBLIC_API_URL + "getTopics",
-    initialInput: "start",
-  });
+  const { messages, isLoading, handleSubmit, error, reload, setMessages } =
+    useChat({
+      api: process.env.EXPO_PUBLIC_API_URL + "getTopics",
+      initialInput: "start",
+    });
 
   const find_dimesions = (e: LayoutChangeEvent) => {
     setHeaderH(e.nativeEvent.layout.height);
@@ -38,6 +45,18 @@ export default function HomeScreen() {
         apiKey,
       },
     },
+  };
+
+  const onReload = () => {
+    console.log("reloading", options);
+    setMessages([
+      {
+        id: "1",
+        role: "user",
+        content: "start",
+      },
+    ]);
+    reload({});
   };
   // uses topics stored in redux
   // if no topics call the api
@@ -72,10 +91,7 @@ export default function HomeScreen() {
               alignItems: "center",
             }}
           >
-            <Pressable
-              style={{ marginEnd: 16 }}
-              onPress={() => reload(options)}
-            >
+            <Pressable style={{ marginEnd: 16 }} onPress={onReload}>
               <Icon name="refresh-cw" color="white" />
             </Pressable>
             <View style={styles.userCircle}>
@@ -96,6 +112,7 @@ export default function HomeScreen() {
         >
           <View style={{ height: headerH + 50 }} />
           <TopicsList topicList={topics} />
+          {Platform.OS === "ios" && <View style={{ height: 100 }} />}
         </ScrollView>
       )}
 

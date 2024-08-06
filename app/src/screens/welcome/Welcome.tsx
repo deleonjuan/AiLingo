@@ -47,6 +47,8 @@ export default function WelcomeScreen() {
           />
 
           <TextInput
+            textContentType="password"
+            secureTextEntry={true}
             onChangeText={setApiKey}
             value={apiKey || ""}
             placeholderTextColor={"gray"}

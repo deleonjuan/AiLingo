@@ -33,7 +33,7 @@ export default function TranslatableText({
 
   return (
     <>
-      <View style={{ display: "flex", flexDirection: "row", gap: 10 }}>
+      <View style={{ display: "flex", flexDirection: "row", gap: 10, flexWrap: "wrap" }}>
         {words.map((word) => (
           <Tooltip
             key={word}

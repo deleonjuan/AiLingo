@@ -1,6 +1,10 @@
 import { useState } from "react";
-import { View, LayoutChangeEvent } from "react-native";
-import { createStyleSheet, useStyles } from "react-native-unistyles";
+import { View, LayoutChangeEvent, Platform } from "react-native";
+import {
+  createStyleSheet,
+  UnistylesRuntime,
+  useStyles,
+} from "react-native-unistyles";
 import Text from "@components/common/Text";
 import Button from "@components/common/Button";
 
@@ -10,6 +14,9 @@ interface ExerciseFooterProps {
   onContinue: () => void;
   isLoading: boolean;
 }
+
+const navBarH =
+  Platform.OS !== "ios" ? UnistylesRuntime.navigationBar.height : 0;
 
 export default function ExerciseFooter({
   answerStatus,
@@ -21,7 +28,7 @@ export default function ExerciseFooter({
   const [footerH, setFooterH] = useState<number>(0);
 
   const find_dimesions = (e: LayoutChangeEvent) => {
-    setFooterH(e.nativeEvent.layout.height);
+    setFooterH(e.nativeEvent.layout.height + navBarH);
   };
 
   return (
@@ -53,6 +60,7 @@ export default function ExerciseFooter({
 const stylesheet = createStyleSheet((theme) => ({
   container: {
     backgroundColor: theme.colors.duoBlue,
+    paddingBottom: navBarH,
   },
   answerContainer: {
     position: "absolute",

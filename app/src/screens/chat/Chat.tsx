@@ -23,6 +23,7 @@ import { SCREENS } from "src/constants/screens.names";
 import { useAppSelector } from "src/hooks/hooks";
 import Error from "@components/common/Error";
 
+const marginBottomAdaptable = Platform.OS === "ios" ? 16 : 0;
 export default function ChatScreen() {
   const { apiKey } = useAppSelector((state) => state.authReducer);
   const { styles, theme } = useStyles(stylesheet);
@@ -125,7 +126,7 @@ const stylesheet = createStyleSheet((theme) => ({
   bottomActionsContainer: {
     borderTopColor: theme.colors.bgGray,
     borderTopWidth: 2,
-    marginBottom: UnistylesRuntime.navigationBar.height,
+    marginBottom: UnistylesRuntime.navigationBar.height + marginBottomAdaptable,
     display: "flex",
     flexDirection: "row",
     alignItems: "center",

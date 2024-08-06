@@ -2,7 +2,7 @@ import Button from "@components/common/Button";
 import Text from "@components/common/Text";
 import TextInput from "@components/common/TextInput";
 import { useState } from "react";
-import { ToastAndroid, View } from "react-native";
+import { Platform, ToastAndroid, View } from "react-native";
 import { UnistylesRuntime } from "react-native-unistyles";
 import { useAppDispatch, useAppSelector } from "src/hooks/hooks";
 import { authActions } from "src/store/slices/auth";
@@ -13,12 +13,22 @@ export default function SettingsScreen() {
   const [newApiKey, setNewApiKey] = useState<string>("");
 
   const onSave = () => {
-    if (apiKey.length > 35) {
-      dispatch(authActions.setApiKey(apiKey));
-      ToastAndroid.show("API KEY set correctly", ToastAndroid.SHORT);
+    console.log("API KEY log", newApiKey.length);
+    if (newApiKey.length > 35) {
+      dispatch(authActions.setApiKey(newApiKey));
+
+      if(Platform.OS === "android") {
+        ToastAndroid.show("API KEY set correctly", ToastAndroid.SHORT)
+      }else{
+        console.log("API KEY set correctly");
+        
+      }
       setNewApiKey("");
     } else {
-      ToastAndroid.show("API KEY is incorrect", ToastAndroid.SHORT);
+      if(Platform.OS === "android") {
+        ToastAndroid.show("API KEY is incorrect", ToastAndroid.SHORT);
+      }
+      console.log("API KEY NOT set correctly");
     }
   };
 
@@ -36,6 +46,7 @@ export default function SettingsScreen() {
       <Text>GOOGLE GEMINI API KEY</Text>
       <TextInput
         textContentType="password"
+        secureTextEntry={true}
         onChangeText={setNewApiKey}
         value={newApiKey}
         placeholder={apiKey.length > 1 ? "***********************" : "api key"}

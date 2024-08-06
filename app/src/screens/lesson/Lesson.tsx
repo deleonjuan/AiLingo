@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { View } from "react-native";
+import { Platform, View } from "react-native";
 import { useChat } from "react-native-vercel-ai";
 import { StatusBar } from "expo-status-bar";
 import {
@@ -104,6 +104,7 @@ export default function LessonScreen({ route }: LessonScreenProps) {
             numberOfExercise={numberOfExercise}
           />
           <View style={{ flex: 3, display: "flex" }}>
+            
             <ExerciseSelector
               content={exercise}
               setValue={setUseAnswer}
@@ -125,7 +126,8 @@ export default function LessonScreen({ route }: LessonScreenProps) {
 
 const stylesheet = createStyleSheet((theme) => ({
   page: {
-    height: UnistylesRuntime.screen.height + UnistylesRuntime.statusBar.height,
+    flex: 1,
+    // height: UnistylesRuntime.screen.height + UnistylesRuntime.statusBar.height,
     backgroundColor: theme.colors.bgBlack,
   },
 }));
