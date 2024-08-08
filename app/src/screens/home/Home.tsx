@@ -13,7 +13,6 @@ import {
 } from "react-native-unistyles";
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
-import { useChat } from "react-native-vercel-ai";
 import TopicsList from "./components/TopicsList";
 import Loading from "@components/common/Loading";
 import { useAppDispatch, useAppSelector } from "src/hooks/hooks";
@@ -21,17 +20,18 @@ import { isEmpty } from "lodash";
 import { learningActions } from "src/store/slices/learning";
 import Error from "@components/common/Error";
 import Icon from "@components/common/Icon";
+import useAIChat from "src/hooks/useAIChat";
 
 export default function HomeScreen() {
   const dispatch = useAppDispatch();
   const { initialTopics } = useAppSelector((state) => state.learningReducer);
-  const { username, apiKey } = useAppSelector((state) => state.authReducer);
+  const { username } = useAppSelector((state) => state.authReducer);
   const { styles } = useStyles(stylesheet);
   const [headerH, setHeaderH] = useState<number>(0);
   const [topics, setTopics] = useState<any[]>([]);
   const { messages, isLoading, handleSubmit, error, reload, setMessages } =
-    useChat({
-      api: process.env.EXPO_PUBLIC_API_URL + "getTopics",
+    useAIChat({
+      path: "getTopics",
       initialInput: "start",
     });
 
@@ -39,16 +39,7 @@ export default function HomeScreen() {
     setHeaderH(e.nativeEvent.layout.height);
   };
 
-  const options = {
-    options: {
-      headers: {
-        apiKey,
-      },
-    },
-  };
-
   const onReload = () => {
-    console.log("reloading", options);
     setMessages([
       {
         id: "1",
@@ -62,7 +53,7 @@ export default function HomeScreen() {
   // if no topics call the api
   useEffect(() => {
     if (!isEmpty(initialTopics)) setTopics(initialTopics);
-    else handleSubmit({}, options);
+    else handleSubmit();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {

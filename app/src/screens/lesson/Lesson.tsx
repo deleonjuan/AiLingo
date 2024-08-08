@@ -1,12 +1,7 @@
 import { useEffect, useState } from "react";
-import { Platform, View } from "react-native";
-import { useChat } from "react-native-vercel-ai";
+import { View } from "react-native";
 import { StatusBar } from "expo-status-bar";
-import {
-  createStyleSheet,
-  UnistylesRuntime,
-  useStyles,
-} from "react-native-unistyles";
+import { createStyleSheet, useStyles } from "react-native-unistyles";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { SCREENS } from "src/constants/screens.names";
@@ -21,6 +16,7 @@ import OneOfThree from "@screens/lesson/components/OneOfThree.exercise";
 import Loading from "@components/common/Loading";
 import { learningActions } from "src/store/slices/learning";
 import LessonHeader from "./components/Header";
+import useAIChat from "src/hooks/useAIChat";
 
 interface LessonScreenProps {
   route: any;
@@ -28,7 +24,6 @@ interface LessonScreenProps {
 
 export default function LessonScreen({ route }: LessonScreenProps) {
   const dispatch = useAppDispatch();
-  const { apiKey } = useAppSelector((state) => state.authReducer);
   const { excercisesPerLesson, wordsLearned, initialTopics } = useAppSelector(
     (state) => state.learningReducer
   );
@@ -36,8 +31,8 @@ export default function LessonScreen({ route }: LessonScreenProps) {
   const { styles } = useStyles(stylesheet);
   const { topic } = route.params;
   const [userAnswer, setUseAnswer] = useState<any>("");
-  const { messages, isLoading, handleSubmit, setMessages } = useChat({
-    api: process.env.EXPO_PUBLIC_API_URL + "getLesson",
+  const { messages, isLoading, handleSubmit, setMessages } = useAIChat({
+    path: "getLesson",
     initialInput:
       `iniciar leccion con tematica: ${topic}, ` +
       `el numero de ejercicios debe ser ${excercisesPerLesson}, ` +
@@ -59,16 +54,7 @@ export default function LessonScreen({ route }: LessonScreenProps) {
 
   // starts the chat automatically
   useEffect(() => {
-    handleSubmit(
-      {},
-      {
-        options: {
-          headers: {
-            apiKey,
-          },
-        },
-      }
-    );
+    handleSubmit();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const onContinue = () => {
@@ -104,7 +90,6 @@ export default function LessonScreen({ route }: LessonScreenProps) {
             numberOfExercise={numberOfExercise}
           />
           <View style={{ flex: 3, display: "flex" }}>
-            
             <ExerciseSelector
               content={exercise}
               setValue={setUseAnswer}

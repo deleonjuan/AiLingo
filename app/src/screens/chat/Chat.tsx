@@ -13,19 +13,17 @@ import {
   useStyles,
 } from "react-native-unistyles";
 import ChatBox from "./components/ChatBox";
-import { useChat } from "react-native-vercel-ai";
 import useChatHandler from "src/hooks/useChatHandler";
 import { useEffect } from "react";
 import { IChatMessage } from "./message";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { SCREENS } from "src/constants/screens.names";
-import { useAppSelector } from "src/hooks/hooks";
 import Error from "@components/common/Error";
+import useAIChat from "src/hooks/useAIChat";
 
 const marginBottomAdaptable = Platform.OS === "ios" ? 16 : 0;
 export default function ChatScreen() {
-  const { apiKey } = useAppSelector((state) => state.authReducer);
   const { styles, theme } = useStyles(stylesheet);
   const {
     messages,
@@ -35,8 +33,8 @@ export default function ChatScreen() {
     input,
     setMessages,
     error,
-  } = useChat({
-    api: process.env.EXPO_PUBLIC_API_URL + "chat",
+  } = useAIChat({
+    path: "chat",
     initialInput: "Hello!",
   });
   const { navigate } = useNavigation<NativeStackNavigationProp<any>>();
@@ -46,20 +44,12 @@ export default function ChatScreen() {
     setMessages,
   });
 
-  const options = {
-    options: {
-      headers: {
-        apiKey,
-      },
-    },
-  };
-
   const onSendMessage = () => {
-    if (!isLoading) handleSubmit({}, options);
+    if (!isLoading) handleSubmit();
   };
 
   useEffect(() => {
-    handleSubmit({}, options);
+    handleSubmit();
   }, []);
 
   return (
@@ -85,7 +75,9 @@ export default function ChatScreen() {
           >
             <Icon size={32} name="chevron-left" color="white" />
           </Pressable>
-          <Text style={{ fontSize: 32, textAlignVertical: "center" }}>Lingo</Text>
+          <Text style={{ fontSize: 32, textAlignVertical: "center" }}>
+            Lingo
+          </Text>
         </View>
       </View>
 
