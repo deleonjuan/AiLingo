@@ -10,12 +10,12 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@ai-sdk/google": "^0.0.26",
+    "@ai-sdk/google": "^0.0.35",
     "@ai-sdk/openai": "^0.0.36",
     "@astrojs/check": "^0.8.1",
     "@astrojs/node": "^8.3.2",
     "@astrojs/vercel": "^7.7.2",
-    "ai": "^3.2.22",
+    "ai": "^3.3.4",
     "astro": "^4.11.5",
     "typescript": "^5.5.3",
     "zod": "^3.23.8"

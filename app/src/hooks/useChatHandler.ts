@@ -30,6 +30,7 @@ const useChatHandler = ({ messages, setMessages }: hookProps) => {
   useEffect(() => {
     if (messages.length < 1) return;
     const lastMsg = messages[messages.length - 1];
+    console.log("🚀 ~ useEffect ~ lastMsg:", lastMsg.content);
 
     // do nothing if message already exist
     const lastMessageAlreadyExist = messageList.find((m) =>
@@ -37,33 +38,45 @@ const useChatHandler = ({ messages, setMessages }: hookProps) => {
     );
     if (lastMessageAlreadyExist) return;
 
-    //
-    if (
-      typeof lastMsg.content === "object" &&
-      "nextMessage" in lastMsg.content
-    ) {
-      let newMsgs: IChatMessage[] = [];
-      if (lastMsg.content.feedback) {
-        newMsgs.push({
-          ...lastMsg,
-          id: `${lastMsg.id}1`,
-          msgType: "feedback",
-          content: lastMsg.content.feedback,
-        });
-      }
-      newMsgs.push({
-        ...lastMsg,
-        id: `${lastMsg.id}0`,
-        msgType: "message",
-        content: lastMsg.content.nextMessage,
-      });
-      setMessageList((list) => [...list, ...newMsgs]);
-      fixMessagesHistory();
-    }
+    // TODO: revert this when gemini-fast is back
+    // if (
+    //   typeof lastMsg.content === "object" &&
+    //   "nextMessage" in lastMsg.content
+    // ) {
+    //   let newMsgs: IChatMessage[] = [];
+    //   if (lastMsg.content.feedback) {
+    //     newMsgs.push({
+    //       ...lastMsg,
+    //       id: `${lastMsg.id}1`,
+    //       msgType: "feedback",
+    //       content: lastMsg.content.feedback,
+    //     });
+    //   }
+    //   newMsgs.push({
+    //     ...lastMsg,
+    //     id: `${lastMsg.id}0`,
+    //     msgType: "message",
+    //     content: lastMsg.content.nextMessage,
+    //   });
+    //   setMessageList((list) => [...list, ...newMsgs]);
+    //   fixMessagesHistory();
+    // }
 
     if (lastMsg.role === "user") {
       setMessageList((list) => [...list, { ...lastMsg, msgType: "message" }]);
+    } else {
+      setMessageList((list) => [
+        ...list,
+        {
+          id: lastMsg.id,
+          content: lastMsg.content.text,
+          role: "assistant",
+          msgType: "message",
+        },
+      ]);
     }
+
+    fixMessagesHistory();
 
     return;
   }, [messages]);

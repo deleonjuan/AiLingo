@@ -1,11 +1,11 @@
 import Text from "@components/common/Text";
 import TextInput from "@components/common/TextInput";
-import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useState } from "react";
 import { KeyboardAvoidingView, Platform, Pressable, View } from "react-native";
 import { createStyleSheet, useStyles } from "react-native-unistyles";
 import { useAppDispatch } from "src/hooks/hooks";
 import { authActions } from "src/store/slices/auth";
+import { settingsActions } from "src/store/slices/settings";
 
 export default function WelcomeScreen() {
   const [username, setUsername] = useState<string | null>(null);
@@ -19,7 +19,7 @@ export default function WelcomeScreen() {
 
   const onContinue = () => {
     if (!username && !apiKey) return;
-    dispatch(authActions.setApiKey(apiKey));
+    dispatch(settingsActions.setApiKey(apiKey));
     dispatch(authActions.setUserName(username));
   };
 
@@ -34,7 +34,6 @@ export default function WelcomeScreen() {
       style={{ flex: 1 }}
     >
       <View style={styles.page}>
-        <StatusBar style="light" translucent={true} />
         <View style={{ width: "100%", paddingHorizontal: 32 }}>
           <Text style={{ fontSize: 32 }}>Bienvenido!</Text>
           <Text>Listo para aprender otro idioma?</Text>

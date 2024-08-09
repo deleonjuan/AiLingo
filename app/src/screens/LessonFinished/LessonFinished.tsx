@@ -2,7 +2,6 @@ import Button from "@components/common/Button";
 import Text from "@components/common/Text";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { StatusBar } from "expo-status-bar";
 import { View } from "react-native";
 import {
   createStyleSheet,
@@ -14,11 +13,10 @@ import { SCREENS } from "src/constants/screens.names";
 export default function LessonFinishedScreen() {
   const { styles } = useStyles(stylesheet);
   const { navigate } = useNavigation<NativeStackNavigationProp<any>>();
-  const onFinish = () => navigate("RootTabs", {screen: SCREENS.HOME});
+  const onFinish = () => navigate("RootTabs", { screen: SCREENS.HOME });
 
   return (
     <View style={styles.page}>
-      <StatusBar style="light" translucent={true} />
       <Text style={{ fontSize: 20 }}>Terminaste tu leccion de hoy</Text>
       <Text style={{ fontSize: 36 }}>Felicidades!!</Text>
       <Text>Super cool animation with confety here.</Text>

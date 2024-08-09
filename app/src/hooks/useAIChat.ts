@@ -7,7 +7,9 @@ interface useAIChatProps {
 }
 
 const useAIChat = ({ path, initialInput }: useAIChatProps) => {
-  const { apiKey } = useAppSelector((state) => state.authReducer);
+  const {
+    settings: { apiKey },
+  } = useAppSelector((state) => state.settingsReducer);
 
   const options = {
     options: {

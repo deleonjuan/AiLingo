@@ -13,11 +13,11 @@ interface TopBarProps {
 export default function TopBar({ numberOfExercise }: TopBarProps) {
   const { navigate } = useNavigation<NativeStackNavigationProp<any>>();
   const { styles } = useStyles(stylesheet);
-  const { excercisesPerLesson } = useAppSelector(
-    (state) => state.learningReducer
-  );
+  const {
+    settings: { excercisesPerLesson },
+  } = useAppSelector((state) => state.settingsReducer);
 
-  let progress = (100 / excercisesPerLesson) * numberOfExercise;
+  let progress = (100 / Number(excercisesPerLesson)) * numberOfExercise;
 
   return (
     <View

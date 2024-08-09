@@ -11,7 +11,6 @@ import {
   UnistylesRuntime,
   useStyles,
 } from "react-native-unistyles";
-import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
 import TopicsList from "./components/TopicsList";
 import Loading from "@components/common/Loading";
@@ -68,8 +67,6 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.page}>
-      <StatusBar style="light" translucent={true} />
-
       <View onLayout={find_dimesions} style={styles.header}>
         <View style={styles.headerBarSection}>
           <View style={styles.languajeBadge}>

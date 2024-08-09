@@ -10,42 +10,49 @@ export const getLessonController = async ({
   headers,
 }: IControllerProps) => {
   const connector = getConnector(headers);
-  const result = await generateText({
-    model: connector(aiModel),
-    system: systemPrompt,
-    messages,
-    toolChoice: "required",
-    tools: {
-      question: tool({
-        description: "Genera una lista de ejercicios",
-        parameters: z.object({
-          tematica: z.string().describe("la tematica de la pregunta"),
-          numberOfExercises: z
-            .string()
-            .describe("numero de ejercicios que se deben generar"),
-          wordsLearned: z.string().describe("palabras que el usuario ya sabe"),
-          initialTopics: z.string().describe("topics que el usuario ya sabe"),
+  try {
+    const result = await generateText({
+      model: connector(aiModel),
+      system: systemPrompt,
+      messages,
+      toolChoice: "required",
+      tools: {
+        question: tool({
+          description: "Genera una lista de ejercicios",
+          parameters: z.object({
+            tematica: z.string().describe("la tematica de la pregunta"),
+            numberOfExercises: z
+              .string()
+              .describe("numero de ejercicios que se deben generar"),
+            wordsLearned: z
+              .string()
+              .describe("palabras que el usuario ya sabe"),
+            initialTopics: z.string().describe("topics que el usuario ya sabe"),
+          }),
+          execute: async ({
+            tematica,
+            numberOfExercises,
+            wordsLearned,
+            initialTopics,
+          }: any) => {
+            return await generateObject({
+              model: connector(aiModel),
+              system: questionSystemPromp,
+              schema: questionSchema,
+              prompt:
+                `Genera una lista de ${numberOfExercises} ejercicios de traduccion respetando la tematica ${tematica}. ` +
+                `puedes utilizar palabras que el usuario ya sabe como: ${wordsLearned}, siempre que sigan la tematica. ` +
+                `puedes relacionar con topics que el usuario ya sabe como: ${initialTopics}, siempre que sigan la tematica. ` +
+                `Elige de entre las modalidades de: 1OF4 o 1OF3 aleatoreamente para los diferentes ejercicios. `,
+            });
+          },
         }),
-        execute: async ({
-          tematica,
-          numberOfExercises,
-          wordsLearned,
-          initialTopics,
-        }) => {
-          return await generateObject({
-            model: connector(aiModel),
-            system: questionSystemPromp,
-            schema: questionSchema,
-            prompt:
-              `Genera una lista de ${numberOfExercises} ejercicios de traduccion respetando la tematica ${tematica}. ` +
-              `puedes utilizar palabras que el usuario ya sabe como: ${wordsLearned}, siempre que sigan la tematica. ` +
-              `puedes relacionar con topics que el usuario ya sabe como: ${initialTopics}, siempre que sigan la tematica. ` +
-              `Elige modalidades aleatorias para los diferentes ejercicios. `,
-          });
-        },
-      }),
-    },
-  });
+      },
+    });
 
-  return result.responseMessages;
+    return result.responseMessages;
+  } catch (e) {
+    console.log("🚀 ~ e:", e);
+    return { error: e };
+  }
 };
