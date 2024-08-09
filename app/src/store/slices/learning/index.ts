@@ -7,7 +7,6 @@ interface LearningState {
   initialTopics: string[];
   lessonsDone: string[];
   wordsLearned: string[];
-  excercisesPerLesson: number;
 }
 
 const initialState: LearningState = {
@@ -15,7 +14,6 @@ const initialState: LearningState = {
   initialTopics: [],
   lessonsDone: [],
   wordsLearned: [],
-  excercisesPerLesson: 5,
 };
 
 const slice = createSlice({

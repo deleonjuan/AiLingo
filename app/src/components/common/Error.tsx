@@ -6,7 +6,9 @@ import { useAppSelector } from "src/hooks/hooks";
 const { width: sWidth } = Dimensions.get("screen");
 
 export default function Error() {
-  const { apiKey } = useAppSelector((state) => state.authReducer);
+  const {
+    settings: { apiKey },
+  } = useAppSelector((state) => state.settingsReducer);
 
   return (
     <View
@@ -26,7 +28,7 @@ export default function Error() {
       <Text style={{ fontSize: 24 }}>Diantres! algo malio sal</Text>
       {apiKey.length < 35 && (
         <>
-          <Text>Parece que no tienes una api key definida</Text>
+          <Text>Parece que no tienes una api key valida</Text>
           <Text>Puedes proveer una en la pantalla de settings</Text>
         </>
       )}

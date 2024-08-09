@@ -1,6 +1,6 @@
-import { generateObject } from "ai";
+import { generateObject, generateText } from "ai";
 import { aiModel, getConnector } from "../lib/utils";
-import { messageSchema } from "./schemas";
+// import { messageSchema } from "./schemas";
 import { type IControllerProps } from "../lib/controllerType";
 
 const topics = "greetings, family, food, places, sports";
@@ -10,9 +10,10 @@ export const chatController = async ({
   headers,
 }: IControllerProps) => {
   const connector = getConnector(headers);
-  const result = await generateObject({
+  // using generateText without schema as temp solution of the gemini-fast failure
+  const result = await generateText({
     model: connector(aiModel),
-    schema: messageSchema,
+    // schema: messageSchema,
     system:
       `Ahora eres un chat especializado en enseñar idiomas, ` +
       `el idioma que debes enseñar es ingles, ` +
@@ -24,5 +25,5 @@ export const chatController = async ({
     messages,
   });
 
-  return result.object;
+  return result;
 };

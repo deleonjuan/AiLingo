@@ -1,26 +1,20 @@
 import { useEffect, useState } from "react";
-import { Platform, View } from "react-native";
-import { useChat } from "react-native-vercel-ai";
-import { StatusBar } from "expo-status-bar";
-import {
-  createStyleSheet,
-  UnistylesRuntime,
-  useStyles,
-} from "react-native-unistyles";
+import { View } from "react-native";
+import { createStyleSheet, useStyles } from "react-native-unistyles";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { SCREENS } from "src/constants/screens.names";
 
 import useExerciseHandler from "src/hooks/useExerciseHandler";
 import useChatLog from "src/hooks/useChatLog";
+import useAIChat from "src/hooks/useAIChat";
 import { useAppDispatch, useAppSelector } from "src/hooks/hooks";
+import { learningActions } from "src/store/slices/learning";
 
 import ExerciseFooter from "@screens/lesson/components/Footer";
-import OneOfFour from "@screens/lesson/components/OneOfFour.exercise";
-import OneOfThree from "@screens/lesson/components/OneOfThree.exercise";
 import Loading from "@components/common/Loading";
-import { learningActions } from "src/store/slices/learning";
 import LessonHeader from "./components/Header";
+import ExerciseSelector from "./components/Excercises";
 
 interface LessonScreenProps {
   route: any;
@@ -28,20 +22,21 @@ interface LessonScreenProps {
 
 export default function LessonScreen({ route }: LessonScreenProps) {
   const dispatch = useAppDispatch();
-  const { apiKey } = useAppSelector((state) => state.authReducer);
-  const { excercisesPerLesson, wordsLearned, initialTopics } = useAppSelector(
+  const { wordsLearned, initialTopics } = useAppSelector(
     (state) => state.learningReducer
   );
+  const { settings } = useAppSelector((state) => state.settingsReducer);
   const { navigate } = useNavigation<NativeStackNavigationProp<any>>();
   const { styles } = useStyles(stylesheet);
   const { topic } = route.params;
   const [userAnswer, setUseAnswer] = useState<any>("");
-  const { messages, isLoading, handleSubmit, setMessages } = useChat({
-    api: process.env.EXPO_PUBLIC_API_URL + "getLesson",
+  const { messages, isLoading, handleSubmit, setMessages } = useAIChat({
+    path: "getLesson",
     initialInput:
       `iniciar leccion con tematica: ${topic}, ` +
-      `el numero de ejercicios debe ser ${excercisesPerLesson}, ` +
+      `el numero de ejercicios debe ser ${settings.excercisesPerLesson}, ` +
       `palabras aprendidas hasta ahora ${wordsLearned.toString()}, ` +
+      `El lenguaje nativo es ${settings.language}, y esta aprendiendo ${settings.languageLearning}, ` +
       `topics que el usuario ya conoce: ${initialTopics.toString()}`,
   });
   const {
@@ -59,16 +54,7 @@ export default function LessonScreen({ route }: LessonScreenProps) {
 
   // starts the chat automatically
   useEffect(() => {
-    handleSubmit(
-      {},
-      {
-        options: {
-          headers: {
-            apiKey,
-          },
-        },
-      }
-    );
+    handleSubmit();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const onContinue = () => {
@@ -82,19 +68,8 @@ export default function LessonScreen({ route }: LessonScreenProps) {
     getNextExcercise();
   };
 
-  const ExerciseSelector = (props: any) => {
-    const options = {
-      "1OF4": () => <OneOfFour {...props} />,
-      "1OF3": () => <OneOfThree {...props} />,
-    } as any;
-
-    return options[exercise.modality]();
-  };
-
   return (
     <View style={styles.page}>
-      <StatusBar style="light" translucent={true} />
-
       {isLoading && !exercise && answerStatus === "none" && <Loading />}
 
       {exercise && (
@@ -104,11 +79,11 @@ export default function LessonScreen({ route }: LessonScreenProps) {
             numberOfExercise={numberOfExercise}
           />
           <View style={{ flex: 3, display: "flex" }}>
-            
             <ExerciseSelector
               content={exercise}
               setValue={setUseAnswer}
               value={userAnswer}
+              modality={exercise.modality}
             />
 
             <ExerciseFooter
@@ -127,7 +102,6 @@ export default function LessonScreen({ route }: LessonScreenProps) {
 const stylesheet = createStyleSheet((theme) => ({
   page: {
     flex: 1,
-    // height: UnistylesRuntime.screen.height + UnistylesRuntime.statusBar.height,
     backgroundColor: theme.colors.bgBlack,
   },
 }));

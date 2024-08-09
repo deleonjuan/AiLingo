@@ -7,5 +7,6 @@ export type IChatMessage = {
     | {
         feedback: string;
         nextMessage: string;
+        text: string
       };
 };

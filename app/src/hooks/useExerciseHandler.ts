@@ -47,8 +47,9 @@ const useExerciseHandler = ({ messages, setMessages }: hookProps) => {
     // if lastMsg role is "assistant"
     // checks if the response of the api is about the quesion
     const tool = lastMsg.content[0];
-    setExercises(tool.result.object);
-    setExercise(tool.result.object[excerciseNum]);
+    //tool.result.object > tool.result.object.exercises as temp fix
+    setExercises(tool.result.object.exercises);
+    setExercise(tool.result.object.exercises[excerciseNum]);
   }, [messages]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return {
