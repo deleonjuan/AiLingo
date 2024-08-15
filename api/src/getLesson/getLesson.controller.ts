@@ -57,8 +57,8 @@ export const getLessonController = async ({
     });
 
     return result.responseMessages;
-  } catch (e) {
-    console.log("🚀 ~ e:", e);
-    return { error: e };
+  } catch (error) {
+    console.log("🚀 getLessonController ~ e:", error);
+    return { error, isError: true };
   }
 };

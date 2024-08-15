@@ -21,10 +21,12 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { SCREENS } from "src/constants/screens.names";
 import Error from "@components/common/Error";
 import useAIChat from "src/hooks/useAIChat";
+import { useAppSelector } from "src/hooks/hooks";
 
 const marginBottomAdaptable = Platform.OS === "ios" ? 16 : 0;
 export default function ChatScreen() {
   const { styles, theme } = useStyles(stylesheet);
+  const {settings: {language, languageLearning}} = useAppSelector(state => state.settingsReducer)
   const {
     messages,
     isLoading,
@@ -35,12 +37,12 @@ export default function ChatScreen() {
     error,
   } = useAIChat({
     path: "chat",
-    initialInput: "Hello!",
+    initialInput: `Hello! I speak ${language} but I want to learn ${languageLearning}`,
   });
   const { navigate } = useNavigation<NativeStackNavigationProp<any>>();
 
   const { messageList } = useChatHandler({
-    messages: messages as IChatMessage[],
+    messages: messages as any[],
     setMessages,
   });
 
