@@ -21,7 +21,7 @@ export default function LessonHeader({ exercise, numberOfExercise }: LessonHeade
       <Text style={styles.headerTitle}>Traduce esta palabra:</Text>
       <View style={{ justifyContent: "center", alignItems: "center", flex: 1 }}>
         <TranslatableText
-          text={exercise.question}
+          text={exercise.exercise}
           translations={exercise.translations}
         />
       </View>
@@ -33,7 +33,7 @@ export default function LessonHeader({ exercise, numberOfExercise }: LessonHeade
       <Text style={styles.headerTitle}>Traduce lo siguiente:</Text>
       <View style={{ justifyContent: "center", alignItems: "center", flex: 1 }}>
         <TranslatableText
-          text={exercise.question}
+          text={exercise.exercise}
           translations={exercise.translations}
         />
       </View>

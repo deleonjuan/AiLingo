@@ -5,5 +5,5 @@ export default function Icon(props: {
   color: string;
   size?: number;
 }) {
-  return <Feather style={{ marginBottom: -3 }} {...props}  size={props.size ?? 24}/>;
+  return <Feather {...props}  size={props.size ?? 24}/>;
 }

@@ -1,7 +1,7 @@
 import { createGoogleGenerativeAI } from "@ai-sdk/google";
 // import { createOpenAI } from "@ai-sdk/openai";
 
-// models/gemini-1.5-fast-latest is failing, using pro instead as a temp solution
+// models/gemini-1.5-flash-latest is failing, using pro instead as a temp solution
 export const aiModel = "models/gemini-1.5-pro-latest";
 
 export const getConnector = (headers: Headers) => {

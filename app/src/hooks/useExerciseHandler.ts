@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Message } from "react-native-vercel-ai";
-import { isArray } from "lodash";
+import { isArray, words } from "lodash";
 import { fixMessagesHistory } from "src/utils/helpers";
 
 type IAnswerStatus = "correct" | "incorrect" | "none";
@@ -19,9 +19,21 @@ const useExerciseHandler = ({ messages, setMessages }: hookProps) => {
   const [answerStatus, setAnswerStatus] = useState<IAnswerStatus>("none");
 
   const onCheckAnswer = (userAnswer: string) => {
-    const isAnswerCorrect = exercise.answer.includes(userAnswer)
-      ? "correct"
-      : "incorrect";
+    let isAnswerCorrect: IAnswerStatus = "incorrect";
+    const wordsInAnswer = words(userAnswer);
+
+    if (wordsInAnswer.length > 1) {
+      wordsInAnswer.map((word) => {
+        if (exercise.answer.includes(word)) {
+          isAnswerCorrect = "correct";
+        }
+      });
+    } else {
+      isAnswerCorrect = exercise.answer.includes(userAnswer)
+        ? "correct"
+        : "incorrect";
+    }
+
     setAnswerStatus(isAnswerCorrect);
     return;
   };

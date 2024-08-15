@@ -15,6 +15,7 @@ import ExerciseFooter from "@screens/lesson/components/Footer";
 import Loading from "@components/common/Loading";
 import LessonHeader from "./components/Header";
 import ExerciseSelector from "./components/Excercises";
+import Error from "@components/common/Error";
 
 interface LessonScreenProps {
   route: any;
@@ -22,22 +23,22 @@ interface LessonScreenProps {
 
 export default function LessonScreen({ route }: LessonScreenProps) {
   const dispatch = useAppDispatch();
-  const { wordsLearned, initialTopics } = useAppSelector(
-    (state) => state.learningReducer
-  );
+  // const { wordsLearned, initialTopics } = useAppSelector(
+  //   (state) => state.learningReducer
+  // );
   const { settings } = useAppSelector((state) => state.settingsReducer);
   const { navigate } = useNavigation<NativeStackNavigationProp<any>>();
   const { styles } = useStyles(stylesheet);
   const { topic } = route.params;
   const [userAnswer, setUseAnswer] = useState<any>("");
-  const { messages, isLoading, handleSubmit, setMessages } = useAIChat({
+  const { messages, isLoading, handleSubmit, setMessages, error } = useAIChat({
     path: "getLesson",
     initialInput:
       `iniciar leccion con tematica: ${topic}, ` +
       `el numero de ejercicios debe ser ${settings.excercisesPerLesson}, ` +
-      `palabras aprendidas hasta ahora ${wordsLearned.toString()}, ` +
-      `El lenguaje nativo es ${settings.language}, y esta aprendiendo ${settings.languageLearning}, ` +
-      `topics que el usuario ya conoce: ${initialTopics.toString()}`,
+      `El lenguaje nativo es ${settings.language}, y esta aprendiendo ${settings.languageLearning}.`,
+    // `palabras aprendidas hasta ahora ${wordsLearned.toString()}, ` +
+    // `topics que el usuario ya conoce: ${initialTopics.toString()}`,
   });
   const {
     exercise,
@@ -72,7 +73,9 @@ export default function LessonScreen({ route }: LessonScreenProps) {
     <View style={styles.page}>
       {isLoading && !exercise && answerStatus === "none" && <Loading />}
 
-      {exercise && (
+      {!isLoading && error && <Error />}
+
+      {!error && exercise && (
         <>
           <LessonHeader
             exercise={exercise}

@@ -81,7 +81,7 @@ export default function ChatScreen() {
         </View>
       </View>
 
-      {!isLoading && error && <Error />}
+      {!isLoading && error && <Error canGoBack />}
 
       {!error && <ChatBox messages={messageList} />}
 

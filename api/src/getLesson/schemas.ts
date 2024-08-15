@@ -3,10 +3,10 @@ import z from "zod";
 export const questionSchema = z.object({
   exercises: z
     .object({
-      modality: z.string().describe("modalidad de la pregunta"),
-      question: z
+      modality: z
         .string()
-        .describe("palabra/frase que el usuario debera traducir"),
+        .describe("modality of the exercise that can be 1OF4 or 1OF3"),
+      exercise: z.string().describe("exercise the user must translate"),
       answer: z
         .string()
         .array()
