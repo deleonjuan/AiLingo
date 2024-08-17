@@ -28,7 +28,9 @@ const useExerciseHandler = ({ messages, setMessages }: hookProps) => {
           isAnswerCorrect = "correct";
         }
       });
-    } else {
+    } 
+    
+    if(isAnswerCorrect === "incorrect") {
       isAnswerCorrect = exercise.answer.includes(userAnswer)
         ? "correct"
         : "incorrect";
