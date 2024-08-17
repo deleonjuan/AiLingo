@@ -27,6 +27,12 @@ The project consists of two main folders:
 1. `app`: The mobile app developed with Expo.
 2. `api`: The backend application developed with Astro.
 
+### In the root folder just run
+    npm install
+
+This will install the dependencies, also it will automatically run a postinstall command that prebuilds the expo app
+  
+
 ### Mobile App Setup (app)
 
 1.  **Navigate to the mobile app folder:**
@@ -35,19 +41,7 @@ The project consists of two main folders:
     cd app
     ```
 
-2.  **Install dependencies:**
-
-    ```sh
-    npm install
-    ```
-
-3.  **Prebuild:**
-
-    ```sh
-    npm run prebuild
-    ```
-
-4.  **Set the API URL:**
+2.  **Set the API URL:**
 
     ```sh
     touch .env.local
@@ -59,7 +53,7 @@ The project consists of two main folders:
     EXPO_PUBLIC_API_URL=http://192.168.1.70:4321/api/
     ```
 
-    > [!NOTE]  
+    > [!NOTE]
     > During August 2024, there will be a service available that you can use. \
     > However, you must provide your own Google Gemini API key via the app: \
     > `EXPO_PUBLIC_API_URL=https://ai-lingo-mauve.vercel.app/api/`. \
@@ -82,7 +76,7 @@ The project consists of two main folders:
       ```
 
 ### Backend App Setup (api)
-
+In another terminal:
 1. **Navigate to the backend app folder:**
 
    ```sh
@@ -104,13 +98,7 @@ The project consists of two main folders:
    > [!IMPORTANT]  
    > If you provide an API key via the app, it will override the one declared in the `.env` file.
 
-3. **Install dependencies:**
-
-   ```sh
-   npm install
-   ```
-
-4. **Run the backend server:**
+3. **Run the backend server:**
 
    ```sh
    npm run dev
