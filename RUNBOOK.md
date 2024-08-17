@@ -30,15 +30,13 @@ The project consists of two main folders:
 ### In the root folder just run
     npm install
 
-This will install the dependencies, also it will automatically run a postinstall command that prebuilds the expo app
-  
-
 ### Mobile App Setup (app)
 
 1.  **Navigate to the mobile app folder:**
 
     ```sh
     cd app
+    npm run prebuild
     ```
 
 2.  **Set the API URL:**
