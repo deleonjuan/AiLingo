@@ -10,11 +10,11 @@ export const questionSchema = z.object({
       answer: z
         .string()
         .array()
-        .describe("traducción o traducciones correctas"),
+        .describe("correct translation"),
       possibleAnswers: z
         .string()
         .array()
-        .describe("seleccion de posibles respuestas"),
+        .describe("list of possible answers, including the correct translation of the exercise"),
       translations: z
         .object({
           word: z.string(),
@@ -22,7 +22,7 @@ export const questionSchema = z.object({
         })
         .array()
         .describe(
-          "lista de palabras usadas en la pregunta/frase que el usuario debe traducir y las posibles traducciones correctas de cada palabra"
+          "list of the words used in the exercise and their corresponding translation"
         ),
     })
     .array(),

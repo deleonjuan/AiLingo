@@ -12,9 +12,9 @@ export const getTopicsController = async ({ headers }: IControllerProps) => {
     schema: topicsSchema,
     system: systemPrompt,
     prompt:
-      `Genera una lista de 4 a 7 arrays que contengan entre 1 y 2 topics, ` +
-      `al menos 30% de los arrays deben tener 2 topics` +
-      `si tiene 2 topics ambos deben estar relacionados de alguna forma, `,
+      `Generate a list of 4 to 7 arrays containing between 1 and 2 topics, ` +
+      `at least 30% of the arrays must have 2 topics ` +
+      `if there are 2 topics, both must be related in some way. `,
   });
 
   return result.object;

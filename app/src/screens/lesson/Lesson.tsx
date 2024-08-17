@@ -34,11 +34,11 @@ export default function LessonScreen({ route }: LessonScreenProps) {
   const { messages, isLoading, handleSubmit, setMessages, error } = useAIChat({
     path: "getLesson",
     initialInput:
-      `iniciar leccion con tematica: ${topic}, ` +
-      `el numero de ejercicios debe ser ${settings.excercisesPerLesson}, ` +
-      `El lenguaje nativo es ${settings.language}, y esta aprendiendo ${settings.languageLearning}.`,
-    // `palabras aprendidas hasta ahora ${wordsLearned.toString()}, ` +
-    // `topics que el usuario ya conoce: ${initialTopics.toString()}`,
+      `start lesson with the theme: ${topic}, ` +
+      `the number of exercises should be ${settings.excercisesPerLesson}, ` +
+      `The native language is ${settings.language}, and they are learning ${settings.languageLearning}, `,
+    // `learned words so far: ${wordsLearned.toString()}, ` +
+    // `topics the user already know: ${initialTopics.toString()}`,
   });
   const {
     exercise,

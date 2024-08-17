@@ -7,12 +7,12 @@ import z from "zod";
 const topics = "greetings, family, food, places, sports, hobbies";
 
 const systemPrompt =
-  `Ahora eres un chat especializado en enseñar idiomas, ` +
-  `elige un tema inicial con el que puedas tener una conversacion basica, ` +
-  `los temas que puedes elejir son: ${topics}. ` +
-  `Realiza preguntas abiertas y cerradas relacionadas con el tema elegido, ` +
-  `proporciona retroalimentación, corrigiendo errores gramaticales, de pronunciación o de vocabulario, ` +
-  `sugiere frases alternativas y explica por qué una corrección es necesaria.`;
+  `Now you are a chat specialized in teaching languages, ` +
+  `choose an initial topic with which you can have a basic conversation, ` +
+  `the topics you can choose from are: ${topics}. ` +
+  `Ask both open and closed-ended questions related to the chosen topic, ` +
+  `provide feedback by correcting grammatical, pronunciation, or vocabulary errors, ` +
+  `suggest alternative phrases, and explain why a correction is necessary.`;
 
 export const chatController = async ({
   messages,
@@ -39,13 +39,13 @@ export const chatController = async ({
             return await generateObject({
               model: connector(aiModel),
               system:
-                `Ahora eres un chat especializado en enseñar idiomas, ` +
+                `Now you are a chat specialized in teaching languages, ` +
                 `you have to speak in ${languageToLearn}, and also translate the same message to ${nativeLanguage} ` +
-                `elige un tema inicial con el que puedas tener una conversacion basica, ` +
-                `los temas que puedes elejir son: ${topics}. ` +
-                `Realiza preguntas abiertas y cerradas relacionadas con el tema elegido, ` +
-                `proporciona retroalimentación, corrigiendo errores gramaticales, de pronunciación o de vocabulario, ` +
-                `sugiere frases alternativas y explica por qué una corrección es necesaria.`,
+                `choose an initial topic with which you can have a basic conversation, ` +
+                `the topics you can choose from are: ${topics}. ` +
+                `Ask both open and closed-ended questions related to the chosen topic, ` +
+                `provide feedback by correcting grammatical, pronunciation, or vocabulary errors, ` +
+                `suggest alternative phrases, and explain why a correction is necessary.`,
               schema: messageSchema,
               messages,
             });

@@ -15,7 +15,6 @@ import {
 import ChatBox from "./components/ChatBox";
 import useChatHandler from "src/hooks/useChatHandler";
 import { useEffect } from "react";
-import { IChatMessage } from "./message";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { SCREENS } from "src/constants/screens.names";
