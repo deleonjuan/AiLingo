@@ -3,6 +3,7 @@
     "name": "ailingo",
     "slug": "ailingo",
     "version": "1.0.0",
+    "entryPoint": ".App.tsx",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",

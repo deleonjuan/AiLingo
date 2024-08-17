@@ -3,18 +3,18 @@ import z from "zod";
 export const questionSchema = z.object({
   exercises: z
     .object({
-      modality: z.string().describe("modalidad de la pregunta"),
-      question: z
+      modality: z
         .string()
-        .describe("palabra/frase que el usuario debera traducir"),
+        .describe("modality of the exercise that can be 1OF4 or 1OF3"),
+      exercise: z.string().describe("exercise the user must translate"),
       answer: z
         .string()
         .array()
-        .describe("traducción o traducciones correctas"),
+        .describe("correct translation"),
       possibleAnswers: z
         .string()
         .array()
-        .describe("seleccion de posibles respuestas"),
+        .describe("list of possible answers, including the correct translation of the exercise"),
       translations: z
         .object({
           word: z.string(),
@@ -22,7 +22,7 @@ export const questionSchema = z.object({
         })
         .array()
         .describe(
-          "lista de palabras usadas en la pregunta/frase que el usuario debe traducir y las posibles traducciones correctas de cada palabra"
+          "list of the words used in the exercise and their corresponding translation"
         ),
     })
     .array(),

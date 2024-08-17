@@ -1,9 +1,19 @@
-import { Feather } from "@expo/vector-icons";
+import { Feather, Ionicons } from "@expo/vector-icons";
 
 export default function Icon(props: {
   name: React.ComponentProps<typeof Feather>["name"];
   color: string;
   size?: number;
 }) {
-  return <Feather style={{ marginBottom: -3 }} {...props}  size={props.size ?? 24}/>;
+  return <Feather {...props} size={props.size ?? 24} />;
+}
+
+export function TranslateIcon(props: { color?: string; size?: number }) {
+  return (
+    <Ionicons
+      name="language-outline"
+      size={props.size ?? 24}
+      color={props.color ?? "white"}
+    />
+  );
 }

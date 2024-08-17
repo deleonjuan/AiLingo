@@ -1,138 +1,124 @@
-# Runbook: Configuración y Ejecución de AiLingo
+# Runbook: AiLingo Setup and Execution
 
-Este documento proporciona instrucciones detalladas sobre cómo descargar y ejecutar el proyecto AiLingo en tu máquina local. El proyecto consta de dos carpetas principales: `app` y `api`.
+This document provides detailed instructions on how to download and run the AiLingo project on your local machine. The project consists of two main folders: `app` and `api`.
 
-## Requisitos Previos
+## Prerequisites
 
-Asegúrate de tener instalados los siguientes programas en tu máquina:
+Make sure you have the following programs installed on your machine:
 
-- Node.js (versión 20.12.2 o superior)
-- npm (versión 10.5.0 o superior)
+- Node.js (version 20.12.2 or higher)
+- npm (version 10.5.0 or higher)
 - Expo CLI
 - Git
 
-## Clonando el Repositorio
+## Cloning the Repository
 
-Para comenzar, clona el repositorio del proyecto desde GitHub.
+To start, clone the project repository from GitHub.
 
 ```sh
 git clone https://https://github.com/deleonjuan/AiLingo
 cd AiLingo
 ```
 
-## Configuración del Proyecto
+## Project Setup
 
-El proyecto consta de dos carpetas principales:
+The project consists of two main folders:
 
-1. `app`: La aplicación móvil desarrollada con Expo.
-2. `api`: La aplicación backend desarrollada con Astro.
+1. `app`: The mobile app developed with Expo.
+2. `api`: The backend application developed with Astro.
 
-### Configuración de la Aplicación Móvil (app)
+### In the root folder just run
+    npm install
 
-1.  **Navega a la carpeta de la aplicación móvil:**
+### Mobile App Setup (app)
+
+1.  **Navigate to the mobile app folder:**
 
     ```sh
     cd app
-    ```
-
-2.  **Instala las dependencias:**
-
-    ```sh
-    npm install
-    ```
-
-3.  **Prebuild:**
-
-    ```sh
     npm run prebuild
     ```
 
-4.  **Indica la url de la api**
+2.  **Set the API URL:**
 
     ```sh
     touch .env.local
     ```
 
-    Abre el archivo `.env.local` en tu editor de texto favorito y agrega la siguiente línea:
+    Open the `.env.local` file in your favorite text editor and add the following line:
 
     ```env
     EXPO_PUBLIC_API_URL=http://192.168.1.70:4321/api/
     ```
 
-    > [!NOTE]  
-    > durante el mes de agosto 2024 habrá un servicio disponible que podrás usar, \
-    > sin embargo debes proveer tu propia api key de google gemini desde la aplicación \
-    > EXPO_PUBLIC_API_URL=https://ai-lingo-mauve.vercel.app/api/ \
-    > si apuntas a este servicio no sera necesario hacer funcionar el backend, pues estaras usando la version de la nube
+    > [!NOTE]
+    > During August 2024, there will be a service available that you can use. \
+    > However, you must provide your own Google Gemini API key via the app: \
+    > `EXPO_PUBLIC_API_URL=https://ai-lingo-mauve.vercel.app/api/`. \
+    > If you point to this service, you won't need to run the backend, as you'll be using the cloud version.
 
-    by default the astro app exposes the api to the local network and the api path is `/api`
+    By default, the Astro app exposes the API to the local network, and the API path is `/api`.
 
-5.  **Ejecuta la aplicación:**
+5.  **Run the application:**
 
-    - Para dispositivos Android:
+    - For Android devices:
 
       ```sh
       npm run android
       ```
 
-    - Para dispositivos iOS:
+    - For iOS devices:
 
       ```sh
       npm run ios
       ```
 
-### Configuración de la Aplicación Backend (api)
-
-1. **Navega a la carpeta de la aplicación backend:**
+### Backend App Setup (api)
+In another terminal:
+1. **Navigate to the backend app folder:**
 
    ```sh
    cd api
    ```
 
-2. **Crea un archivo `.env` en la carpeta `api` y agrega tu API key de Google Generative AI:**
+2. **Create a `.env` file in the `api` folder and add your Google Generative AI API key:**
 
    ```sh
    touch .env
    ```
 
-   Abre el archivo `.env` en tu editor de texto favorito y agrega la siguiente línea:
+   Open the `.env` file in your favorite text editor and add the following line:
 
    ```env
-   GOOGLE_GENERATIVE_AI_API_KEY=<tu_api_key_aqui>
+   GOOGLE_GENERATIVE_AI_API_KEY=<your_api_key_here>
    ```
 
    > [!IMPORTANT]  
-   > Si provees una api key desde la app, esta sera tomada en vez de la declarada en el archivo `.env`
+   > If you provide an API key via the app, it will override the one declared in the `.env` file.
 
-3. **Instala las dependencias:**
-
-   ```sh
-   npm install
-   ```
-
-4. **Ejecuta el servidor backend:**
+3. **Run the backend server:**
 
    ```sh
    npm run dev
    ```
 
-## Verificación
+## Verification
 
-Para verificar que todo está funcionando correctamente:
+To verify everything is working correctly:
 
-1. **Asegúrate de que el servidor backend esté corriendo sin errores.** Deberías ver mensajes en la terminal indicando que el servidor está activo y escuchando peticiones.
-2. **Abre la aplicación móvil en un emulador o dispositivo físico.** Asegúrate de que la aplicación pueda comunicarse con el backend correctamente.
+1. **Ensure the backend server is running without errors.** You should see messages in the terminal indicating that the server is active and listening for requests.
+2. **Open the mobile app on an emulator or physical device.** Make sure the app can communicate with the backend correctly.
 
-## Solución de Problemas
+## Troubleshooting
 
-- **Errores de conexión:** Verifica que el backend está corriendo y que la URL del backend en la aplicación móvil es correcta.
-- **Problemas con Expo:** Asegúrate de tener la última versión de Expo CLI instalada y ejecuta `expo doctor` para diagnosticar posibles problemas.
-- **Errores con dependencias:** Ejecuta `npm install` en ambas carpetas (`app` y `api`) para asegurarte de que todas las dependencias estén correctamente instaladas.
+- **Connection errors:** Ensure the backend is running and that the backend URL in the mobile app is correct.
+- **Expo issues:** Make sure you have the latest version of Expo CLI installed and run `expo doctor` to diagnose potential issues.
+- **Dependency errors:** Run `npm install` in both folders (`app` and `api`) to ensure all dependencies are installed correctly.
 
-## Conclusión
+## Conclusion
 
-Siguiendo estos pasos, deberías poder configurar y ejecutar AiLingo en tu máquina local sin problemas. Si encuentras algún inconveniente, no dudes en revisar la documentación oficial de las tecnologías utilizadas o contactar al equipo de desarrollo para obtener asistencia.
+By following these steps, you should be able to set up and run AiLingo on your local machine without issues. If you encounter any problems, feel free to review the official documentation of the technologies used or contact the development team for assistance.
 
 ---
 
-¡Gracias por contribuir a AiLingo!
+Thank you for contributing to AiLingo!

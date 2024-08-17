@@ -1,0 +1,35 @@
+{
+  "name": "ailingo",
+  "version": "0.0.1",
+  "description": "AI powered app to learn new languages",
+  "main": "index.js",
+  "workspaces":[
+    "api",
+    "app"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/deleonjuan/AiLingo.git"
+  },
+  "keywords": [
+    "AI",
+    "IA",
+    "react",
+    "react",
+    "native",
+    "vercel",
+    "gemini",
+    "gemini-1.5-pro",
+    "google-gemini",
+    "vercel-ai"
+  ],
+  "author": "JDL",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/deleonjuan/AiLingo/issues"
+  },
+  "homepage": "https://github.com/deleonjuan/AiLingo#readme"
+}

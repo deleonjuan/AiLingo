@@ -1,12 +1,13 @@
 export type IChatMessage = {
   id: string;
-  role: "user" | "assistant";
-  msgType: "feedback" | "message"
+  role: "user" | "tool";
   content:
     | string
     | {
         feedback: string;
         nextMessage: string;
-        text: string
+        text?: string,
+        type?: string,
+        translation: string,
       };
 };

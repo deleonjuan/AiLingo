@@ -1,82 +1,43 @@
-import { IChatMessage } from "@screens/chat/message";
+import { isArray } from "lodash";
 import { useEffect, useState } from "react";
+import { Message } from "react-native-vercel-ai";
+import { fixMessagesHistory } from "src/utils/helpers";
+
+interface IMsg extends Omit<Message, "content"> {
+  content: string | any[];
+}
 
 interface hookProps {
-  messages: IChatMessage[];
+  messages: IMsg[];
   setMessages: (e: any) => void;
 }
 
 const useChatHandler = ({ messages, setMessages }: hookProps) => {
-  const [messageList, setMessageList] = useState<IChatMessage[]>([]);
-
-  const fixMessagesHistory = () => {
-    const newArr = Array.from(messages);
-    const lastMsg = messages[messages.length - 1];
-
-    if (typeof lastMsg.content === "object") {
-      newArr.pop();
-
-      const { feedback } = lastMsg.content;
-
-      newArr.push({
-        ...lastMsg,
-        content: `${feedback ? feedback + "," : ""} ${lastMsg.content.nextMessage}`,
-      });
-    }
-
-    setMessages(newArr);
-  };
+  const [messageList, setMessageList] = useState<any[]>([]);
 
   useEffect(() => {
     if (messages.length < 1) return;
     const lastMsg = messages[messages.length - 1];
-    console.log("🚀 ~ useEffect ~ lastMsg:", lastMsg.content);
 
     // do nothing if message already exist
     const lastMessageAlreadyExist = messageList.find((m) =>
       m.id.includes(lastMsg.id)
     );
     if (lastMessageAlreadyExist) return;
-
-    // TODO: revert this when gemini-fast is back
-    // if (
-    //   typeof lastMsg.content === "object" &&
-    //   "nextMessage" in lastMsg.content
-    // ) {
-    //   let newMsgs: IChatMessage[] = [];
-    //   if (lastMsg.content.feedback) {
-    //     newMsgs.push({
-    //       ...lastMsg,
-    //       id: `${lastMsg.id}1`,
-    //       msgType: "feedback",
-    //       content: lastMsg.content.feedback,
-    //     });
-    //   }
-    //   newMsgs.push({
-    //     ...lastMsg,
-    //     id: `${lastMsg.id}0`,
-    //     msgType: "message",
-    //     content: lastMsg.content.nextMessage,
-    //   });
-    //   setMessageList((list) => [...list, ...newMsgs]);
-    //   fixMessagesHistory();
-    // }
-
-    if (lastMsg.role === "user") {
-      setMessageList((list) => [...list, { ...lastMsg, msgType: "message" }]);
-    } else {
-      setMessageList((list) => [
-        ...list,
-        {
-          id: lastMsg.id,
-          content: lastMsg.content.text,
-          role: "assistant",
-          msgType: "message",
-        },
-      ]);
+    
+    if (isArray(lastMsg.content) && !lastMsg.content[0].type) {
+      setMessages(fixMessagesHistory(messages));
+      return;
     }
-
-    fixMessagesHistory();
+    
+    if (lastMsg.role === "user") {
+      setMessageList(list => [...list, lastMsg])
+    }else{
+      setMessageList(list => [...list, {
+        ...lastMsg,
+        content: lastMsg.content[0].result.object
+      }])
+    };
 
     return;
   }, [messages]);
